@@ -449,8 +449,8 @@ CREATE TABLE `user` (
 -- ----------------------------
 INSERT INTO `user` VALUES ('1', 'Athena', 'IHz0EFMvkqR97iRc6bEf9x9Xjr12PrO76kTr0EPQGPs=', ' 管理员,普通用户', ' 管理部,人事部,技术部,生产部,管理部', '60F6BEA894DA2E1D1AF423AFBE412660A5AD8FA32B4A257126EB74DD85F5A793600D32FD70CBF64C2009185A2A62BA5EEFA98B129EBE44B88CA2C0C8C9307A4E', '6A6EB123D3E9F477AF3DC2A17EF16C6368B8F6DED0CD1D7B91AD3AA265FB2226', 'NULL');
 INSERT INTO `user` VALUES ('3', 'Athensssiii', 'IHz0EFMvkqR97iRc6bEf9x9Xjr12PrO76kTr0EPQGPs=', ' 管理员,普通用户,会员,黄金会员,一般用户', ' 管理部,人事部,技术部,生产部', 'NULL', 'NULL', 'NULL');
-INSERT INTO `user` VALUES ('12', 'ztt', 'GdbXZMWo/zwTPBwOZKzFn4Vd1KENl77QwYRqUlR3ou8=', ' 管理员,普通用户,会员,黄金会员', ' 管理部,人事部,技术部,生产部', 'NULL', 'NULL', 'NULL');
-INSERT INTO `user` VALUES ('13', '234', 'jur7a4/Wxu4nyUiSK3kNpbcrbSuAuIH8XsNII4nwTRI=', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL');
+INSERT INTO `user` VALUES ('12', 'ztt', 'IHz0EFMvkqR97iRc6bEf9x9Xjr12PrO76kTr0EPQGPs=', ' 管理员,普通用户,会员,黄金会员', ' 管理部,人事部,技术部,生产部', 'NULL', 'NULL', 'NULL');
+INSERT INTO `user` VALUES ('13', '234', 'IHz0EFMvkqR97iRc6bEf9x9Xjr12PrO76kTr0EPQGPs=', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL');
 
 -- ----------------------------
 -- Table structure for user_group

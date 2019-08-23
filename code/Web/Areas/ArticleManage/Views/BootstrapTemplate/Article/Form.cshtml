@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<head> 
+    <script>
+    var keyValue = $.request("keyValue");
+    var SortID = $.request("SortID");
+    $(function () {
+        if (!!keyValue) {
+            UE.delEditor('content');
+            $.ajax({
+                url: "/ArticleManage/Article/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }        
+        var ue = UE.getEditor('content', { initialFrameHeight: 100, initialFrameWidth: 1530 });
+
+    })
+    
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var content = UE.getEditor('content').getContent();
+        var jsondata = $("#form1").formSerialize();
+        delete (jsondata.undefined);
+        jsondata.content = content;
+        $.submitForm({
+            url: "/ArticleManage/Article/SubmitForm?keyValue=" + keyValue,
+            param: jsondata,
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid"); 
+                //$('#form1').close();
+            }
+        })
+    }
+    </script>
+</head>
+
+
+
+<div id="form" style="border:1px solid #ddd;">
+    <form id="form1">
+        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#">基本信息</a></li>
+            </ul>
+        
+            <div style="padding-top: 20px; margin-right: 30px;">
+                   <table class="form">
+                    <tr>
+                        <th class="formTitle">文章标题<span style="color:red;">*</span></th>
+                        <td class="formValue">
+                            <input id="title" name="title" type="text" class="form-control required" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">作者<span style="color:red;">*</span></th>
+                        <td class="formValue">
+                            <input id="author" name="author" type="text" class="form-control required" />
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th class="formTitle">文章内容</th>
+                        <td class="formValue">
+                            <textarea id="content" name="content" style="width:100%"></textarea>
+                        </td>
+                    </tr>
+                                   
+                </table>
+            </div>
+        </div>
+    </form>
+    <script src="~/Content/js/iColorPicker.js"></script>
+    <div align="right" style="margin:5px 30px 5px 0">
+        <a class="layui-layer-btn0 btn btn-primary" onclick="submitForm()">确认</a>
+        <a class="layui-layer-btn1 btn btn-danger" onclick="history.go(-1)">返回</a>
+    </div>
+</div>

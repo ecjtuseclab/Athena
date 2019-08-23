@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_ACEIndex.cshtml";
+}
+<script>
+    //获取参数值
+    function getUrlParms(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+    var k = getUrlParms("keyValue");
+    var arraylist;
+
+    UE.delEditor('content');
+    $(function () {
+        $.ajax({
+            url: "/ArticleManage/Article/GetFormJson",
+            data: { keyValue: k },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                arraylist = data;
+            }
+        });
+
+        var vm = new ViewModel();
+        ko.applyBindings(vm);
+    });
+
+    function ViewModel() {
+        var me = this;
+        me.model = ko.observable(arraylist);
+        me.save = function () {
+
+            var model = me.model();
+            var content = UE.getEditor('content').getContent();
+            delete (model.content);
+            model.content = content;
+            if (!$('#DetailForm').formValid()) {
+                return false;
+            }
+            //提交表单数据
+            $ace.post("@this.ContentUrl("~/ArticleManage/Article/SubmitForm")", model, function (result) {
+
+            });
+        }
+    }
+
+</script>
+    <form id="DetailForm" >
+            <div style="padding-top: 20px; margin-right: 30px;">
+                <table class="form">
+                    <tr>
+                        <td class="formTitle">文章标题<span style="color:red;">*</span></td>
+                        <td class="formValue">
+                            <label class="form-control" data-bind="text:model().title"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">作者<span style="color:red;">*</span></td>
+                        <td class="formValue">
+                            <label class="form-control" data-bind="text:model().author"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">文章内容</td>
+                        <td class="formValue" colspan="4">
+                            <textarea id="content" class="content" name="content" style="width: 100%;" data-bind="value:model().content" readonly></textarea>
+                        </td>
+                    </tr>                                        
+                </table>
+        </div>
+    </form>
+    <script src="~/Content/js/iColorPicker.js"></script>
+    <div align="right" style="margin:5px 30px 5px 0">
+        <a class="layui-layer-btn1 btn btn-danger" onclick="history.go(-1)">返回</a>
+    </div>

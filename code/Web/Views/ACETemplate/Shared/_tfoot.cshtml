@@ -1,0 +1,34 @@
+﻿<tfoot>
+    <tr>
+        <td colspan="999" align="center">
+            <div class="fx-page">
+                <!-- ko if: CurrentPage()!=1 -->
+                <a class="fx-page-span" href="javascript:;" data-bind="click:ToPage.bind($data,CurrentPage()-1)">上一页</a>
+                <!-- /ko -->
+                <!-- ko if: ShowFirstPage() -->
+                <a class="fx-page-span" href="javascript:;" title="首页" data-bind="click:ToPage.bind($data,1),text:1"></a>
+                <span class="fx-page-span">...</span>
+                <!-- /ko -->
+                <!-- ko foreach:ShowPages -->
+                <!-- ko if: $data==$parent.CurrentPage() -->
+                <span class="fx-page-span fx-page-curr" data-bind="text:$data"></span>
+                <!-- /ko -->
+                <!-- ko if: $data!=$parent.CurrentPage() -->
+                <a class="fx-page-span" href="javascript:;" data-bind="click:$parent.ToPage.bind($data,$data),text:$data"></a>
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko if: ShowLastPage() -->
+                <span class="fx-page-span">...</span>
+                <a class="fx-page-span" href="javascript:;" title="尾页" data-bind="click:ToPage.bind($data,TotalPage()),text:TotalPage()"></a>
+                <!-- /ko -->
+                <!-- ko if: CurrentPage()<TotalPage() -->
+                <a class="fx-page-span" href="javascript:;" data-bind="click:ToPage.bind($data,CurrentPage()+1)">下一页</a>
+                <!-- /ko -->
+
+                <span class="fx-page-total">&nbsp;共<span class="fx-page-total" data-bind="text:TotalCount"></span>条</span>
+
+                <span class="fx-page-total">到第<input type="number" min="1" onkeyup="this.value=this.value.replace(/\D/, '');" data-bind="value:SkipPage">页 <button type="button" class="fx-page-btn" data-bind="click:ToPage.bind($data,SkipPage())">确定</button></span>
+            </div>
+        </td>
+    </tr>
+</tfoot>

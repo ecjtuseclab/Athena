@@ -1,0 +1,131 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_ACEIndex.cshtml";
+}
+@this.Partial("Index-js")
+
+
+<div class="topPanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$ace.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-primary" data-bind="click:Edit,attr:{disabled:!DataTable.SelectedModel()}"><i class="fa fa-pencil-square-o"></i>修改</button>
+            <button class="btn btn-primary" data-bind="click:Delete,attr:{disabled:!DataTable.SelectedModel()}"><i class="fa fa-trash-o"></i>删除</button>
+            <button class="btn btn-primary" data-bind="click:Add"><i class="fa fa-plus"></i>添加</button>
+            <button class="btn btn-primary" data-bind="click:Detail,attr:{disabled:!DataTable.SelectedModel()}"><i class="fa fa-pencil-square-o"></i>详情</button>  
+        </div>
+    </div>
+    <div class="search">
+        <table>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <input id="txt_keyword" type="text" class="form-control" placeholder="文章标题" style="width: 200px;" data-bind="value:SearchModel().keyword">
+                        <span class="input-group-btn">
+                            <button id="btn_search" type="button" class="btn  btn-primary" data-bind="click:Search"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<div class="table-responsive">
+    <table class="table table-hover" data-bind="with:DataTable">
+        <thead>
+            <tr>
+                <th style="width:20px;"></th>
+                <th>文章标题</th>
+                <th>作者</th>
+                <th>文章内容</th>                
+            </tr>
+        </thead>
+
+        <tbody data-bind="foreach:Models">
+            <tr data-bind="click:$parent.SelectRow">
+                <td data-bind="text:$parent.GetOrdinal($index())"></td>
+                <td data-bind="text:title"></td>
+                <td data-bind="text:author"></td>
+                <td data-bind="text:$ace.getFuzzyContent(content()),attr:{herf:'#',title:content}"></td>
+                                
+            </tr>
+        </tbody>
+    @this.Partial("_tfoot")
+    </table>
+</div>
+
+
+@*@using (Html.Dialog())
+{
+    <form id="form1" style="width:auto;height:600px;">
+        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+            <div style="padding-top: 20px; margin-right: 30px;">
+                <table class="form">
+                    <tr>
+                        <td class="formTitle">文章标题</td>
+                        <td class="formValue">
+                            <input id="title" name="title" type="text" class="form-control required" placeholder="请输入标题" data-bind="value:Model().title" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">新建时间</td>
+                        <td class="formValue">
+                            <input id="inserttime" name="inserttime" type="text" class="form-control input-wdatepicker Wdate" placeholder="请输入新建时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" data-bind="value:Model().inserttime" />
+                        </td>
+                        <td class="formTitle">编辑时间</td>
+                        <td class="formValue">
+                            <input id="edittime" name="edittime" type="text" class="form-control input-wdatepicker Wdate" placeholder="请输入编辑时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" data-bind="value:Model().edittime" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">文章内容</td>
+                        <td class="formValue" colspan="3">
+                            <textarea id="content" name="content" class="form-control" data-bind="value:Model().content"></textarea>
+                        </td>
+                    </tr>                                        
+                </table>
+            </div>
+        </div>
+    </form>
+
+}*@
+@*@this.Partial("form-js")*@
+
+
+@*@using (Html.Dialog("DetailDialog", "DetailDialog", 800))
+{
+    <form id="DetailForm">
+        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+            <div style="padding-top: 20px; margin-right: 30px;">
+                <table class="form">
+                    <tr>
+                        <td class="formTitle">文章标题：</td>
+                        <td class="formValue">
+                           <label class="form-control" data-bind="text:Model().title"></label>
+                        </td>                        
+                    </tr>
+                    <tr>
+                        <td class="formTitle">文章内容：</td>
+                        <td class="formValue" >                               
+                            <textarea id="detailcontent" name="content" style="width: 310%;" type="text" class="form-control parentLayer" placeholder="请输入文章内容" data-bind="value:Model().content" readonly></textarea>                         
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">新建时间：</td>
+                        <td class="formValue">
+                            <label class="form-control" data-bind="dateString:Model().inserttime"></label>                               
+                        </td>
+                        <td class="formTitle">编辑时间：</td>
+                        <td class="formValue">
+                            <label class="form-control" data-bind="dateString:Model().edittime"></label>
+                        </td>
+                    </tr>                    
+                </table>
+            </div>
+        </div>
+    </form>
+}*@

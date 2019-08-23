@@ -1,0 +1,148 @@
+﻿<script>
+
+    var _vm;
+    $(function () {
+        var vm = new ViewModel();
+        _vm = vm;
+        vmExtend.call(vm);
+        ko.applyBindings(vm);
+        vm.Init();
+    });
+
+    function ViewModel() {
+        var me = this;
+        ViewModelBase.call(me);
+        vmExtend.call(me);
+
+        me.DeleteUrl = "@this.ContentUrl("~/SystemManage/Area/Delete")";
+        me.DataTable = new DataTableBase(me);
+        me.Dialog = new Dialog(me);
+
+        me.AreaString = _oba(@this.Raw(ViewBag.AreaString));
+
+        //详情页
+        me.DetailDialog = new DetailDialog(me);
+        me.Detail = function () {
+            me.DetailDialog.Open(me.DataTable.SelectedModel(), "详情");
+        }
+        me.Menus = _oba(@this.Raw(ViewBag.Menus));//add
+    }
+    function vmExtend() {
+        var me = this;
+
+        me.Init = function () {
+            me.LoadModels();
+        }
+        me.LoadModels = function (page) {
+            me.DataTable.SelectedModel(null);
+            var params = me.SearchModel();
+            //params.page = page || 1;
+            $ace.get("@this.ContentUrl("~/SystemManage/Area/GetModels")", params, function (result) {
+            me.DataTable.SetModels(result.Data);
+            }
+          );
+        }
+    }
+
+    //详情页对话框设置
+    function DetailDialog() {
+        var me = this;
+        DialogBase.call(me);
+
+        me.OnOpen = function () {
+            //将“保存”按钮隐藏
+            me.ShowSaveButton(false);
+            var model = me.EditModel();
+            if (model) {
+                var dataModel = model.Data;
+                var bindModel = $ko.toJS(dataModel);
+                me.Model(bindModel);
+            }
+            else {
+                me.EditModel(null);
+                me.Model({});
+            }
+        }
+    }
+
+    function Dialog(vm) {
+        var me = this;
+        DialogBase.call(me);
+        me.OnOpen = function () {
+            var model = me.EditModel();
+            if (model) {
+                var dataModel = model.Data;
+                var bindModel = $ko.toJS(dataModel);
+                me.Model(bindModel);
+            }
+            else {
+                me.EditModel(null);
+                me.Model({});
+            }
+        }
+
+        me.OnSave = function () {
+            var model = me.Model();
+
+            if (!$('#form1').formValid()) {
+                return false;
+            }
+
+            if (me.EditModel()) {
+                $ace.post("@this.ContentUrl("~/SystemManage/Area/Update")", model, function (result) {
+                    $ace.msg(result.Msg);
+                    me.Close();
+                    vm.LoadModels();
+                }
+               );
+            }
+            else {
+                $ace.post("@this.ContentUrl("~/SystemManage/Area/Add")", model, function (result) {
+                    $ace.msg(result.Msg);
+                    me.Close();
+                    vm.LoadModels();
+                }
+             );
+            }
+        }
+    }
+
+
+    function expandChildren(ele) {
+
+        $ele = $(ele);
+
+        var $tr = $ele.parent().parent();
+        var id = $tr.attr("id");
+
+        var selector = "tr[parent-id='" + id + "']";
+        var $children = $tr.siblings(selector);
+
+        if ($ele.hasClass("glyphicon-triangle-bottom")) {
+            $children.hide();
+            $ele.removeClass("glyphicon-triangle-bottom");
+            $ele.addClass("glyphicon-triangle-right");
+        }
+        else {
+            $children.show();
+            $ele.removeClass("glyphicon-triangle-right");
+            $ele.addClass("glyphicon-triangle-bottom");
+        }
+
+        for (var i = 0; i < $children.length; i++) {
+            var $child = $($children[i]);
+
+            var $iconNodes = $child.find(".glyphicon");
+            if ($iconNodes.length > 0) {
+                expandChildren($iconNodes[0]);
+            }
+        }
+    }
+    function appendRetract(level) {
+        var s = "";
+        for (var i = 0; i < level * 4; i++) {
+            s += "&nbsp;";
+        }
+        return s;
+    }
+</script>

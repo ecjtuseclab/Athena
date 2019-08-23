@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "About";
+    Layout = "~/Views/Shared/_ACEIndex.cshtml";
+}
+
+<style>
+    .rows {
+        /*text-align:center;*/
+        margin:0 27% 0 23%;
+    }
+</style>
+<div class="body" style="width:80%">
+ <div class="rows" style="margin-bottom: 1%; border: 1px solid #e6e6e6; overflow: hidden; padding-left: 1px;width:inherit;">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Athena平台介绍
+            </div>
+            <div class="panel-body">
+                <p>
+                    <img src="~/Content/img/flag.jpg" />本框架遵守MIT协议，版权最终解释权归华东交通大学系统工程与密码学研究所所有</p>
+                <p><img src="~/Content/img/flag.jpg" />Athena是一套基于ASP.NET MVC+EF6+Bootstrap开发出来的框架，源代码完全开源。</p>
+                <p><img src="~/Content/img/flag.jpg" />参考当前主流前端框架，提供两套前端主题，并可通过webconfig配置进行切换，操作简单，学习容易。</p>
+                <p><img src="~/Content/img/flag.jpg" />支持SQLServer、MySQL等多数据库切换。</p>
+                <p><img src="~/Content/img/flag.jpg" />内嵌独立开发的通用工作流引擎，可以根据不同的业务自由定制代码，只需简单配置相关数据便可创建一个复杂的流程，也支持会签等。</p>
+                <p><img src="~/Content/img/flag.jpg" />权限管理（采用基于角色的访问控制，实现不同人看到不同数据，拥有不同操作权限）。</p>
+                <p><img src="~/Content/img/flag.jpg" />提高开发效率及质量。常用类封装，日志、缓存、验证、字典、文件、邮件、Excel等，兼容目前最流行浏览器（IE8+、Chrome、Firefox、360浏览器）。</p>
+                <p><img src="~/Content/img/flag.jpg" />适用范围：可以广泛应用于各种管理系统。</p>
+            </div>
+        </div>
+    </div>
+    <div class="rows" style="margin-bottom: 1%; border: 1px solid #e6e6e6; overflow: hidden; padding-left: 1px;width:inherit;">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Athena技术介绍
+            </div>
+            <div class="panel-body" style="overflow: hidden;">
+                <div>
+                    <h4>前端技术</h4>
+                    <div style="float: left; width: 50%;">
+                        <h5>第一套主题</h5>
+                        <p><img src="~/Content/img/flag.jpg" />JS框架：jquery-2.1.1、Bootstrap.js、JQuery UI</p>
+                        <p><img src="~/Content/img/flag.jpg" />CSS框架：Bootstrap</p>
+                        <p><img src="~/Content/img/flag.jpg" />在线编辑器：UEditor</p>
+                        <p><img src="~/Content/img/flag.jpg" />数据表格：jqGrid、Bootstrap Talbe</p>
+                        <p><img src="~/Content/img/flag.jpg" />对话框：layer-v2.3</p>
+                        <p><img src="~/Content/img/flag.jpg" />下拉选择框：jQuery Select2</p>
+                        <p><img src="~/Content/img/flag.jpg" />树结构控件：jQuery zTree、jQuery wdtree</p>
+                        <p><img src="~/Content/img/flag.jpg" />页面布局：jquery.layout.js 1.4.4</p>
+                        <p><img src="~/Content/img/flag.jpg" />图表插件：echarts</p>
+                        <p><img src="~/Content/img/flag.jpg" />日期控件： My97DatePicker</p>
+                        <p><img src="~/Content/img/flag.jpg" />工作流可视化控件</p>
+                    </div>
+                    <div style="float: left; width: 50%;">
+                        <h5>第二套主题</h5>
+                        <p><img src="~/Content/img/flag.jpg" />兼容BootStrape和Jquery UI</p>
+                        <p><img src="~/Content/img/flag.jpg" />图标：font awesome 3.2</p>
+                        <p><img src="~/Content/img/flag.jpg" />表格：BootStrape的表格、Jquery UI的表格、jqGrid</p>
+                        <p><img src="~/Content/img/flag.jpg" />图表：jquery.flot、jquery.easy-pie-chart</p>
+                        <p><img src="~/Content/img/flag.jpg" />提示框：bootbox.js</p>
+                        <p><img src="~/Content/img/flag.jpg" />缓存框架：微软自带Cache、Redis</p>
+                        <p><img src="~/Content/img/flag.jpg" />日志管理：Log4net、登录日志、操作日志</p>
+                        <p><img src="~/Content/img/flag.jpg" />日历插件：daterangepicker.min.js、My97DatePicker</p>
+                   </div>
+                </div>
+                <div style="float: left;">
+                    <h4>后端技术</h4>
+                    <p>&nbsp &nbsp &nbsp &nbsp Athena框架基于微软ASP.NET MVC5框架，结合控制反转（IOC）、对象关系映射（PRM）、前端UI组件、微软自带缓存Cache、Redis和各种插件，
+                        完成框架基本功能。
+                    </p>
+                   
+                </div>
+                 <div class="keyTech" style="float: left;">
+                    <div  id="IOC" style="float: left;">
+                        <h5>IOC</h5>
+                        <p>&nbsp &nbsp &nbsp &nbsp IOC(inversion of control)即控制反转，并非一种技术，二是一种设计思想。主要用来帮助应用程序解耦，
+                            并把程序分离成一个个高内聚低耦合的模块。传统应用程序都是在类内部主动创建依赖对象，从而导致类
+                            与类之间高耦合，利用IoC容器把创建和查找依赖对象的控制权交给容器，由容器进行注入组合对象，所以
+                            对象与对象之间是松散耦合，利于功能复用，程序的整体结构更加灵活。本框架中采用基于.net平台的Ninject框架，使用它的目的在于做到最少配置，由于其他IOC工具对配置文
+                            件依赖较大，需要使用冗长且复杂的assembly-qualified名称来进行定义，容易出错破坏程序。</p>
+                    </div>
+                    <div  id="ORM" style="float: left;">
+                        <h5>ORM</h5>
+                        <p>&nbsp &nbsp &nbsp &nbsp 对象关系映射（Object Relational Mapping，简写为ORM）用于实现面向对象编程语言里不同类型系统的数
+                            据之间的转换。Athena框架中ORM采用SqlSugar，它是一款高性能（达到ADO.NET最高性能水平），是除EF外
+                            拉姆达解析最完善的ORM，支持多表 、UnionALL、 交叉子查询、真实的批量操作和分页，并支持分布式二级缓存
+                            （CRUD可以自动清除缓存)和读写分离功能，对数据库结构结构没太多要求支持主键、多自增列和异步，用法简单，
+                            功能齐全。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="rows" style="margin-bottom: 1%; border: 1px solid #e6e6e6; overflow: hidden; padding-left: 1px;width:inherit;">
+        <div class="panel panel-default" >
+            <div class="panel-heading">
+                联系我们
+            </div>
+            <div class="panel-body" style="text-align:center;">
+                <span>技术交流QQ群：498487801</span> <img src="~/Content/img/qqChat.jpg" alt="扫描二维码加入qq群交流学习" style="width:80px;height:80px;">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+

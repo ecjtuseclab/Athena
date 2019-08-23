@@ -1,0 +1,102 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_ACEIndex.cshtml";
+}
+<script>
+    //var k = $.request("keyValue");
+    function getUrlParms(name)
+    {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+   
+    var k = getUrlParms("keyValue");
+    if (k == undefined)
+        k = null;
+    var arraylist;
+
+    UE.delEditor('content');
+    $(function () {
+        $.ajax({
+            url: "/ArticleManage/Article/GetFormJson",
+            data: { keyValue: k },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                arraylist = data;
+            }
+        });
+
+        var vm = new ViewModel();
+        ko.applyBindings(vm);
+    });
+
+    function ViewModel() {
+        var me = this;
+        if (typeof (arraylist) == 'undefined'||arraylist==null)
+        {
+            var obj = {};
+            obj["SortID"] = 0;
+            obj["author"] = "";
+            obj["content"] = "";
+            obj["edittime"] = "";
+            obj["id"] = 0;
+            obj["inserttime"] = "";
+            obj["title"] = "";
+            obj["type"] = "";
+            arraylist = obj;
+
+        }
+        console.log(arraylist);
+        me.model = ko.observable(arraylist);
+        me.save = function ()
+        { 
+            console.log("xxxx");
+            var model = me.model();
+            var content = UE.getEditor('content').getContent();
+            delete (model.content);
+            model.content = content;
+            if (!$('#form1').formValid()) {
+                return false;
+            }
+            //提交表单数据
+            $ace.post("@this.ContentUrl("~/ArticleManage/Article/SubmitForm")", model, function (result) {
+                console.log("xxxx");
+            });
+        }
+
+    }
+    var ue = UE.getEditor('content', { initialFrameHeight: 300, initialFrameWidth: 1530 });
+
+</script>
+    <form id="form1" >
+            <div style="padding-top: 20px; margin-right: 30px;">
+                <table class="form">
+                    <tr>
+                        <td class="formTitle">文章标题<span style="color:red;">*</span></td>
+                        <td class="formValue" style="width:1530px;">
+                            <input id="title" name="title" type="text" class="form-control required" placeholder="请输入标题" data-bind="value:model().title" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">作者<span style="color:red;">*</span></td>
+                        <td class="formValue" style="width:1530px;">
+                            <input id="author" name="author" type="text" class="form-control required" placeholder="请输入作者" data-bind="value:model().author" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">文章内容</td>
+                        <td class="formValue" colspan="4">
+                            <textarea id="content" name="content" data-bind="value:model().content"></textarea>
+                        </td>
+                    </tr>                                        
+                </table>
+        </div>
+    </form>
+    <script src="~/Content/js/iColorPicker.js"></script>
+    <div align="right" style="margin:5px 30px 5px 0">
+        <a class="btn btn-success" data-bind="click:save">确认</a>
+        <a class="layui-layer-btn1 btn btn-danger" onclick="history.go(-1)">返回</a>
+    </div>

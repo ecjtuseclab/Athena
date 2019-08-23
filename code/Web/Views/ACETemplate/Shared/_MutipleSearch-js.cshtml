@@ -1,0 +1,152 @@
+﻿@*<script>
+    var _vm;
+  
+
+    function submitForm() {
+        ////ko////////////////////////////
+        var vm = new ViewModel();
+        _vm = vm;
+        ko.applyBindings(vm);
+        //////////////////////////////////
+        if (!$('#formSearch').formValid()) {
+            return false;
+        }
+        var trList = $("#bodyTable").children("tr");
+        var rules = "";
+        for (var i = 0; i < trList.length; i++) {
+            var tdArr = trList.eq(i).find("td");
+            var searchField = tdArr.eq(0).find("select").val();
+            var searchOper = tdArr.eq(1).find("select").val();
+            var searchString = tdArr.eq(2).find("input").val();
+            if (searchField && searchOper && searchString) {
+                rules += ',{"field":"' + searchField + '","op":"' + searchOper + '","data":"' + searchString + '"}';
+            }
+            else {
+                alert('不能为空');
+                return;
+            }
+        }
+        if (rules) {
+            rules = rules.substring(1);
+        }
+        var filtersStr = '{"groupOp":"AND","rules":[' + rules + ']}';
+
+        $.ajax({
+            url: "/SystemManage/Group/GetModels",
+            data: { filters: filtersStr },
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                this.DataTable.SelectedModel(null);
+                this.DataTable.SetPagedData(result.data)
+                console.log(result.data);
+            }
+        });
+    }
+
+ 
+    function Addrule()//添加规则
+    {
+        var i = 0
+        i++
+        R = formTable.insertRow()
+        C = R.insertCell()
+        C.innerHTML =
+            '<select id="searchField" class="form-control required"><option value="id">编号</option>   <option value="groupname">组名</option>  <option value="groupcode">组编号</option> </select>'
+        C = R.insertCell()
+        C.innerHTML =
+            ' <select  id="searchOper" class="form-control required"><option value="eq" selected="selected">等于</option><option value="ne">不等</option><option value="bw">开始于</option><option value="bn">不开始于</option><option value="ew">结束于</option><option value="en">不结束于</option><option value="cn">包含</option><option value="nc">不包含</option><option value="nu">空值</option><option value="nn">非空值</option><option value="in">包含</option><option value="ni">不包含</option><select>'
+        C = R.insertCell()
+        C.innerHTML =
+            '<input type="text" id="searchString" class="form-control"></input>'
+        C = R.insertCell()
+        C.innerHTML =
+            "<input type='button'  class='btn btn-primary' value='删除' onclick='deleteRow(this)'>"
+        initControl();
+    }
+    function deleteRow(obj) {
+        formTable.deleteRow(obj.parentElement.parentElement.rowIndex);
+    }
+ </script>*@
+
+<script>
+
+    var _vm;
+    function submitForm() {//提交表单时
+        var vm = new ViewModel();
+        _vm = vm;
+        ko.applyBindings(vm);
+        vm.Init();
+    }
+    function getFilters() {
+        if (!$('#formSearch').formValid()) {
+            return false;
+        }
+        var trList = $("#bodyTable").children("tr");
+        var rules = "";
+        for (var i = 0; i < trList.length; i++) {
+            var tdArr = trList.eq(i).find("td");
+            var searchField = tdArr.eq(0).find("select").val();
+            var searchOper = tdArr.eq(1).find("select").val();
+            var searchString = tdArr.eq(2).find("input").val();
+            if (searchField && searchOper && searchString) {
+                rules += ',{"field":"' + searchField + '","op":"' + searchOper + '","data":"' + searchString + '"}';
+            }
+            else {
+                //alert('不能为空');
+                return;
+            }
+        }
+        if (rules) {
+            rules = rules.substring(1);
+        }
+        var filtersStr = '{"groupOp":"AND","rules":[' + rules + ']}';
+        return filtersStr;
+    }
+    function ViewModel() {
+        var me = this;
+        ViewModelBase.call(me);
+        vmExtend.call(me);
+    }
+    function vmExtend() {
+        var me = this;
+
+        me.Init = function () {
+            me.LoadModels();
+        }
+
+        me.LoadModels = function (page) {
+            me.DataTable.SelectedModel(null);
+            var params = me.SearchModel();
+            params.filters = getFilters(); //规则
+            params.page = page || 1;
+            $ace.get("@this.ContentUrl("~/SystemManage/Group/GetModels")", params, function (result) {
+                me.DataTable.SetPagedData(result.Data);
+            }
+          );
+        }
+    }
+    function Addrule()//添加规则
+    {
+        var i = 0
+        i++
+        R = formTable.insertRow()
+        C = R.insertCell()
+        C.innerHTML =
+            '<select id="searchField" class="form-control required"><option value="id">编号</option>   <option value="groupname">组名</option>  <option value="groupcode">组编号</option> </select>'
+        C = R.insertCell()
+        C.innerHTML =
+            ' <select  id="searchOper" class="form-control required"><option value="eq" selected="selected">等于</option><option value="ne">不等</option><option value="bw">开始于</option><option value="bn">不开始于</option><option value="ew">结束于</option><option value="en">不结束于</option><option value="cn">包含</option><option value="nc">不包含</option><option value="nu">空值</option><option value="nn">非空值</option><option value="in">包含</option><option value="ni">不包含</option><select>'
+        C = R.insertCell()
+        C.innerHTML =
+            '<input type="text" id="searchString" class="form-control"></input>'
+        C = R.insertCell()
+        C.innerHTML =
+            "<input type='button'  class='btn btn-primary' value='删除' onclick='deleteRow(this)'>"
+        initControl();
+    }
+    function deleteRow(obj) {
+        formTable.deleteRow(obj.parentElement.parentElement.rowIndex);
+    }
+</script>
+

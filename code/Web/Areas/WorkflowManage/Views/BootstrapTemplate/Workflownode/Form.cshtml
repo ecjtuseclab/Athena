@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/WorkflowManage/Workflownode/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+    });
+    function initControl() {
+        $("#wfid").bindSelect({
+            url: "/WorkflowManage/Workflownode/GetSelectJson",
+        });
+    }
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        $.submitForm({
+            url: "/WorkflowManage/Workflownode/SubmitForm?keyValue=" + keyValue,
+            param: $("#form1").formSerialize(),
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid"); 
+                //$('#form1').close();
+            }
+        })
+    }
+</script>
+<form id="form1">
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">基本信息</a></li>
+            @*<li ><a href="#">扩展信息</a></li>*@
+        </ul>
+        <div style="padding-top: 20px; margin-right: 30px;">
+               <table class="form">
+                <tr>
+                    <th class="formTitle">工作流名称</th>
+                    <td class="formValue">
+                        <select id="wfid" name="wfid" class="form-control">
+                        </select>
+                    </td>
+                    <th class="formTitle">节点名称</th>
+                    <td class="formValue">
+                        <input id="wfnodename" name="wfnodename" type="text" class="form-control" placeholder="请输入节点名称" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle"> 节点开始时间</th>
+                    <td class="formValue">
+                        <input id="wfnodebegintime" name="wfnodebegintime" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" type="text" class="form-control" placeholder="请输入节点开始时间" />
+                    </td>
+                    <th class="formTitle">节点结束时间</th>
+                    <td class="formValue">
+                        <input id="wfnodeendtime" name="wfnodeendtime" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" type="text" class="form-control"  placeholder="请输入节点结束时间"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">节点状态</th>
+                    <td class="formValue">
+                        <select id="wfnodestatus" name="wfnodestatus" class="form-control required">
+                            <option value="">==请选择==</option>
+                            <option value="1" title="启用">启用</option>
+                            <option value="2" title="未启用">未启用</option>
+                        </select>
+                        @*<input id="wfnodestatus" name="wfnodestatus" type="text" class="form-control"  placeholder="请输入节点状态"/>*@
+                    </td>
+                    <th class="formTitle">锁定状态</th>
+                    <td class="formValue">
+                        <select id="wfnodelock" name="wfnodelock" class="form-control required">
+                            <option value="">==请选择==</option>
+                            <option value="1" title="锁定">锁定</option>
+                            <option value="2" title="未锁定">未锁定</option>
+                        </select>
+                        @*<input id="wfnodelock" name="wfnodelock" type="text" class="form-control" placeholder="请输入锁定状态" />*@
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">节点描述</th>
+                    <td class="formValue">
+                        <input id="wfnodememo" name="wfnodememo" type="text" class="form-control" placeholder="请输入节点描述" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>

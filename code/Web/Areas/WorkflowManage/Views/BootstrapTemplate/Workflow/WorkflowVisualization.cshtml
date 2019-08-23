@@ -1,0 +1,246 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<link type="text/css"
+    href="~/Content/WorkflowVisualization/lib/jquery-ui-1.8.4.custom/css/smoothness/jquery-ui-1.8.4.custom.css"
+    rel="stylesheet" />
+
+<script type="text/javascript" src="~/Content/WorkflowVisualization/lib/raphael-min.js"></script>
+<script type="text/javascript"
+    src="~/Content/WorkflowVisualization/lib/jquery-ui-1.8.4.custom/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript"
+    src="~/Content/WorkflowVisualization/lib/jquery-ui-1.8.4.custom/js/jquery-ui-1.8.4.custom.min.js"></script>
+<script type="text/javascript" src="~/Content/WorkflowVisualization/myflow.js"></script>
+<script type="text/javascript" src="~/Content/WorkflowVisualization/myflow.editors.js"></script>
+<script type="text/javascript" src="~/Content/WorkflowVisualization/myflowJsonStandardization.js"></script>
+<script src="~/Content/WorkflowVisualization/laydate/laydate.js"></script>
+<script type="text/javascript">
+    var wf = @this.RawSerialize(this.ViewBag.workflow);
+    var actionlist=@this.RawSerialize(this.ViewBag.actionlist);
+    var rolelist=@this.RawSerialize(this.ViewBag.rolelist);
+    var myflow = $.myflow;
+    $.extend(true, myflow.config.rect, {
+        attr: {
+            r: 8,
+            fill: '#F6F7FF',
+            stroke: '#03689A',
+            "stroke-width": 2
+        }
+    });
+    $.extend(true, myflow.config.props.props,
+    {
+        id: { name: 'id', label: '主键', value:wf.id,visible:false, editor: function () { return new myflow.editors.inputEditor(); } },
+        wfname: { name: 'wfname', label: '工作流名称', value:wf.wfname,visible:true, editor: function () { return new myflow.editors.inputEditor(); } },
+        wfmemo: { name: 'wfmemo', label: '工作流描述', value: wf.wfmemo,visible:true, editor: function () { return new myflow.editors.inputEditor(); } },
+        wfownertable: { name: 'wfownertable', label: '业务表', value:wf.wfownertable,visible:true, editor: function () { return new myflow.editors.inputEditor(); } },
+        wffieldname: { name: 'wffieldname', label: '工作流字段', value: wf.wffieldname,visible:true, editor: function () { return new myflow.editors.inputEditor(); } },
+        wfbegintime: { name: 'wfbegintime', label: '开始时间', value:wf.wfbegintime, visible:true,editor: function () { return new myflow.editors.inputEditor(); } },
+        wfstoptime: { name: 'wfstoptime', label: '结束时间', value:wf.wfstoptime,visible:true, editor: function () { return new myflow.editors.inputEditor(); } },
+        wfstatus: { name: 'wfstatus', label: '启用状态', value: '', visible:true,editor: function () { return new myflow.editors.selectEditor([{ name: '启用', value: 1 }, { name: '未启用', value: 2}]); } },
+        wflock: { name: 'wflock', label: '是否锁定', value: '',visible:true, editor: function () { return new myflow.editors.selectEditor([{ name: '否', value: 1 }, { name: '是', value: 2}]); } }
+    });
+    $.extend(true, myflow.config.tools.states,
+    {
+        state: { showType: 'text', type: 'state',
+            name: { text: '<<state>>' },
+            text: { text: '状态' },
+            img: { src: '', width: 48, height: 48 },
+            props: {
+                text: { name: 'text', label: '显示', value: '', visible:true,editor: function () { return new myflow.editors.textEditor(); }, value: '状态' },
+                id: { name: 'id', label: '主键', value: '-1', visible:false,editor: function () { return new myflow.editors.inputEditor(); } },
+                wfnodename: { name: 'wfnodename', label: '节点名称', value: '', visible:true,editor: function () { return new myflow.editors.inputEditor(); } },
+                wfnodememo: { name: 'wfnodememo', label: '节点描述', value: '',visible:true, editor: function () { return new myflow.editors.inputEditor(); } },
+                wfnodestatus:{ name: 'wfnodestatus', label: '启用状态', value: '',visible:true, editor: function () { return new myflow.editors.selectEditor([{ name: '启用', value: 1 }, { name: '未启用', value: 2}]); } },
+                wfnodelock: { name: 'wfnodelock', label: '是否锁定', value: '',visible:true, editor: function () { return new myflow.editors.selectEditor([{ name: '否', value: 1 }, { name: '是', value: 2}]); } }
+            }
+        },
+        task: { showType: 'text', type: 'task',
+            name: { text: '<<task>>' },
+            text: { text: '操作动作' },
+            attr: { r: 50, fill: '#1E90FF'
+            },
+            img: { src: '', width: 48, height: 48 },
+            props: {
+                text: { name: 'text', label: '显示', value: '',visible:true, editor: function () { return new myflow.editors.textEditor(); }, value: '任务' },
+                id: { name: 'id', label: '主键', value: '-1',visible:false, editor: function () { return new myflow.editors.inputEditor(); } },
+                actionid: { name: 'actionid', label: '动作名称', value: '',visible:true, editor: function () { return new myflow.editors.selectEditor(actionlist); } },
+                nastatus: { name: 'nastatus', label: '动作启用状态', value: '',visible:true, editor: function () { return new myflow.editors.selectEditor([{ name: '启用', value: 1 }, { name: '未启用', value: 2}]); } },
+                nalock: { name: 'nalock', label: '动作锁定', value: '',visible:true, editor: function () { return new myflow.editors.selectEditor([{ name: '否', value: 1 }, { name: '是', value: 2}]); } },
+                nodetype: { name: 'nodetype', label: '动作类型', value: '',visible:true, editor: function () { return new myflow.editors.selectEditor([{ name: '普通动作', value: 1 }, { name: '会签动作', value: 2}]); } },
+                opid: { name: 'opid', label: '执行者主键', value: '-1',visible:false, editor: function () { return new myflow.editors.inputEditor(); } },
+                operatortype: { name: 'operatortype', label: '执行者类型', value: '', visible:true,editor: function () { return new myflow.editors.selectEditor([{ name: '角色', value: 1 }, { name: '用户', value: 2}]); } },
+                nodeoperator: { name: 'nodeoperator', label: '执行者', value: '',visible:true, editor: function () { return new myflow.editors.selectEditor(rolelist); } },
+                operatorstatus: { name: 'operatorstatus', label: '执行启用状态', value: '',visible:true, editor: function () { return new myflow.editors.selectEditor([{ name: '启用', value: 1 }, { name: '未启用', value: 2}]); } },
+                operatorlock: { name: 'operatorlock', label: '执行锁定', value: '',visible:true, editor: function () { return new myflow.editors.selectEditor([{ name: '否', value: 1 }, { name: '是', value: 2}]); } }
+            }
+        }
+    });
+
+
+    $(function () {
+        $('#myflow')
+				.myflow(
+						{
+						    basePath: "",
+						    restore: @this.Raw(this.ViewBag.workflowjsonstr),
+						    tools: {
+						        save: {
+						            onclick: function (data) {
+						                console.log(data);
+						                var result = JsonStandardization(data); 
+						                console.log(result);
+						                $.post("ProcessDesign",
+                                              { workflowJson: result[0], primitiveJSonStr: result[1] },
+                                              function (result) {
+                                                  console.log(result);
+                                                  if(result.result)
+                                                  {
+                                                      var i=window.confirm("保存成功！");
+                                                      if(i!=0)
+                                                      {
+                                                          window.location.href="Index";
+                                                      }
+                                                       
+                                                  }
+                                                  else
+                                                  {
+                                                      window.confirm("其他原因导致保存失败！");
+                                                  }
+                                              });
+						            }
+						        }
+						    }
+						});
+    });
+                    function ReturnBack()
+                    {
+                        window.location.href="Index";
+                    }
+</script>
+<style type="text/css">
+    body
+    {
+        margin: 0;
+        pading: 0;
+        text-align: left;
+        font-family: Arial, sans-serif, Helvetica, Tahoma;
+        font-size: 12px;
+        line-height: 1.5;
+        color: black; 
+    }
+
+    .node
+    {
+        width: 70px;
+        text-align: center;
+        vertical-align: middle;
+        border: 1px solid #fff;
+    }
+
+    .mover
+    {
+        border: 1px solid #ddd;
+        background-color: #ddd;
+    }
+
+    .selected
+    {
+        background-color: #ddd;
+    }
+
+    .state
+    {
+    }
+
+    #myflow_props table
+    {
+    }
+
+    #myflow_props th
+    {
+        letter-spacing: 2px;
+        text-align: left;
+        padding: 6px;
+        background: #ddd;
+    }
+
+    #myflow_props td
+    {
+        background: #fff;
+        padding: 6px;
+    }
+
+    #pointer
+    {
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    #path
+    {
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    #task
+    {
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    #state
+    {
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+</style>
+<body>
+    <div id="myflow_tools"
+        style="position: absolute; top: 10; left: 10; background-color: #fff; width: 70px; cursor: default; padding: 3px;"
+        class="ui-widget-content">
+        <div id="myflow_tools_handle" style="text-align: center;"
+            class="ui-widget-header">
+            工具集
+        </div>
+
+         
+        <div class="node" id="myflow_return">
+           <a href="Index" style="text-decoration:none" onClick="return confirm('确定取消?');"> <img src="~/Content/WorkflowVisualization/img/save.gif" />&nbsp;&nbsp;取消</a></div>
+        <div class="node" id="myflow_save">
+            <img src="~/Content/WorkflowVisualization/img/save.gif" />&nbsp;&nbsp;保存</div>
+        <div>
+            <hr />
+        </div>
+        <div class="node selectable" id="pointer">
+            <img src="~/Content/WorkflowVisualization/img/select16.gif" />&nbsp;&nbsp;选择</div>
+        <div class="node selectable" id="path">
+            <img src="~/Content/WorkflowVisualization/img/16/flow_sequence.png" />&nbsp;&nbsp;转换</div>
+        <div>
+            <hr />
+        </div>
+        <div class="node state" id="state" type="state">
+            <img src="~/Content/WorkflowVisualization/img/16/task_empty.png" />&nbsp;&nbsp;节点</div>
+        <div class="node state" id="task" type="task">
+            <img src="~/Content/WorkflowVisualization/img/16/task_empty.png" />&nbsp;&nbsp;动作</div>
+
+    </div>
+
+    <div id="myflow_props"
+        style="position: absolute; top: 30; right: 50; background-color: #fff; width: 220px; padding: 3px;"
+        class="ui-widget-content">
+        <div id="myflow_props_handle" class="ui-widget-header">属性</div>
+        <table border="1" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+                <td>aaa</td>
+            </tr>
+            <tr>
+                <td>aaa</td>
+            </tr>
+        </table>
+        <div>&nbsp;</div>
+    </div>
+
+    <div id="myflow"></div>
+</body>
+

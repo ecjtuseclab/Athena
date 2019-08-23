@@ -1,0 +1,142 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+
+    <script>
+        $(function () {
+            gridList();
+        })
+        function gridList() {
+            var $gridList = $("#gridList");
+            $gridList.dataGrid({
+                url: "/SystemManage/Action/GetGridJson",
+                height: $(window).height() - 126,
+                //pager: 'pager',
+                //rowList: [10, 20, 30], //可调整每页显示的记录数   
+                //rowNum: 40,
+                pager: "#gridPager",
+                sortname: 'id asc',
+                viewrecords: true,
+                colModel: [
+                    { label: "主键", name: "id", hidden: true, key: true },
+                    { label: '动作名称', name: 'actionname', width: 150, align: 'left' },
+                    { label: '动作编号', name: 'actioncode', width: 150, align: 'left' },
+                    { label: '动作所属', name: 'actionowner', width: 150, align: 'left',},
+                    { label: '动作类型', name: 'actiontype', width: 150, align: 'left',},
+                    { label: '动作地址', name: 'actionurl', width: 150, align: 'left' },
+                    { label: '动作参数', name: 'actionparam', width: 150, align: 'left' },
+                    { label: '控制器名称', name: 'controlername', width: 150, align: 'left' }
+                ]
+            });
+            $("#btn_search").click(function () {
+                $gridList.jqGrid('setGridParam', {
+                    postData: { keyword: $("#txt_keyword").val() },
+                }).trigger('reloadGrid');
+            });
+        }
+        function btn_add() {
+            $.modalOpen({
+                id: "Form",
+                title: "新增动作",
+                url: "/SystemManage/Action/Form",
+                width: "700px",
+                height: "510px",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].submitForm();
+                }
+            });
+        }
+        function btn_edit() {
+            var keyValue = $("#gridList").jqGridRowValue().id;
+            $.modalOpen({
+                id: "Form",
+                title: "修改动作",
+                url: "/SystemManage/Action/Form?keyValue=" + keyValue,
+                width: "700px",
+                height: "510px",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].submitForm();
+                }
+            });
+        }
+        function btn_delete() {
+            $.deleteForm({
+                url: "/SystemManage/Action/DeleteForm",
+                param: { keyValue: $("#gridList").jqGridRowValue().id },
+                success: function () {
+                    $.currentWindow().$("#gridList").resetSelection();
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            })
+        }
+
+        function btn_details() {
+            var keyValue = $("#gridList").jqGridRowValue().id;
+            $.modalOpen({
+                id: "Details",
+                title: "查看动作",
+                url: "/SystemManage/Action/Details?keyValue=" + keyValue,
+                width: "700px",
+                height: "510px",
+                btn: null,
+            });
+        }
+        function btn_copyandpaste() {
+            $.deleteForm({
+                url: "/SystemManage/Action/copyAndPasteForm",
+                param: { keyValue: $("#gridList").jqGridRowValue().id },
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            })
+
+        }
+
+</script>
+
+
+<div class="topPanel">
+    <div class="search">
+        <table>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <input id="txt_keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;">
+                        <span class="input-group-btn">
+                            <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+        <div class="btn-group">
+            <a id="add" authorize="yes" class="btn btn-primary" onclick="btn_add()"><i class="fa fa-plus"></i>新建动作</a>
+        </div>
+        <div class="operate">
+            <ul class="nav nav-pills">
+                <li class="first">已选中<span>1</span>项</li>
+                <li><a id="edit" authorize="yes" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改动作</a></li>
+                <li><a id="delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除动作</a></li>
+                   <li><a id="NF-Details" authorize="yes" onclick="btn_details()"><i class="fa fa-search-plus"></i>查看动作</a></li>
+                <li><a id="NF-copyAndPaste"  onclick="btn_copyandpaste()"><i class="fa fa-search-plus"></i>复制粘贴</a></li>
+            </ul>
+            <a href="javascript:;" class="close"></a>
+        </div>
+       @* <script>$('.toolbar').authorizeButton()</script>*@
+    </div>
+</div>
+
+
+
+<div class="gridPanel">
+    <table id="gridList"></table>
+     <div id="gridPager" class="scroll"></div> 
+</div>
+

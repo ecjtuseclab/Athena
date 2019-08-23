@@ -1,0 +1,141 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/SystemManage/Role/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+    })
+    function initControl() {
+        $('#wizard').wizard().on('change', function (e, data) {
+            var $finish = $("#btn_finish");
+            var $next = $("#btn_next");
+            //var $third = $("#btn_third");
+            if (data.direction == "next") {
+                switch (data.step) {
+                    case 1:
+                        if (!$('#form1').formValid()) {
+                            return false;
+                        }
+                        break;
+                    case 2:
+                        if (!$('#form1').formValid()) {
+                            return false;
+                        }
+                        $finish.show();
+                        $next.hide();
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                $finish.hide();
+                $next.show();
+            }
+        });
+        $("#permissionTree").treeview({
+            height: 444,
+            showcheck: true,
+            url: "/SystemManage/Role/GetPermissionTree",
+            param: { roleId: keyValue }
+        });
+        $("#actionpermissionTree").treeview({
+            height: 444,
+            showcheck: true,
+            url: "/SystemManage/Role/ActionAuthorityTree",
+            param: { roleId: keyValue }
+        });
+    }
+    function submitForm() {
+        var postData = $("#form1").formSerialize();
+        postData["permissionIds"] = String($("#permissionTree").getCheckedNodes());
+        var actiondata = [];
+        actiondata = String($("#actionpermissionTree").getCheckedNodes());
+        $.submitForm({
+            url: "/SystemManage/Role/SubmitForm?keyValue=" + keyValue + "&actionpermissionIds=" + actiondata,
+            param: postData,
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        });
+    }
+    //$(function () {
+    //    $("#roleexpiretime").datepicker(
+    //        {
+    //            changeMonth: true,
+    //            changeYear: true,
+    //            showButtonPanel: true
+    //        });
+    //})
+</script>
+<form id="form1">
+    <div class="widget-body">
+        <div id="wizard" class="wizard" data-target="#wizard-steps" style="border-left: none; border-top: none; border-right: none;">
+            <ul class="steps">
+                <li data-target="#step-1" class="active"><span class="step">1</span>角色信息<span class="chevron"></span></li>
+                <li data-target="#step-2"><span class="step">2</span>资源权限<span class="chevron"></span></li>
+                <li data-target="#step-3"><span class="step">3</span>动作权限<span class="chevron"></span></li>
+            </ul>
+        </div>
+        <div class="step-content" id="wizard-steps" style="border-left: none; border-bottom: none; border-right: none;">
+            <div class="step-pane active" id="step-1" style="margin: 10px; margin-bottom: 0px;">
+                <div class="alert alert-danger" style="text-align: left; margin-bottom: 10px;">
+                    <i class="fa fa-warning alert-dismissible" style="position: relative; top: 1px; font-size: 15px; padding-right: 5px;"></i>
+                    请填写角色信息，用于创建或修改角色信息！角色编号为2的n次方
+
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">表单信息</h3>
+                    </div>
+                    <div class="panel-body" style="width: 98%;">
+                        <table class="form">
+                            <tr>
+                                <th class="formTitle">角色名称<span style="color:red;">*</span></th>
+                                <td class="formValue">
+                                    <input id="rolename" name="rolename" type="text" class="form-control required" placeholder="请输入角色名称" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">角色编号</th>
+                                <td class="formValue">
+                                    <input id="rolecode" name="rolecode" type="text" class="form-control" placeholder="请输入角色编号" />
+                                </td>
+                            </tr>
+                          <tr>
+                                <th class="formTitle">角色有效时间<span style="color:red;">*</span></th>
+                                <td class="formValue">
+                                    <input id="roleexpiretime" name="roleexpiretime" type="text" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" class="form-control required" placeholder="请输入角色有效时间" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="step-pane" id="step-2">
+                <div id="permissionTree"></div>
+            </div>
+            <div class="step-pane" id="step-3">
+                <div id="actionpermissionTree"></div>
+            </div>
+        </div>
+        <div class="form-button" id="wizard-actions">
+            <a id="btn_last" disabled class="btn btn-default btn-prev">上一步</a>
+            <a id="btn_next" class="btn btn-default btn-next">下一步</a>
+@*            <a id="btn_third" style="display: none;" class="btn btn-default btn_third">第三步</a>*@
+            <a id="btn_finish" class="btn btn-default" style="display: none;" onclick="submitForm()">完成</a>
+        </div>
+    </div>
+</form>

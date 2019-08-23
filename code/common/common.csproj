@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3112D484-3CA6-41CA-86BC-84A3ECAF42FC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Athena.common</RootNamespace>
+    <AssemblyName>Athena.common</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DocX">
+      <HintPath>..\Web\NFineuse\DocX.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\Web\NFineuse\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Memcached.ClientLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=42c0400964dcc297, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Web\NFineuse\Memcached.ClientLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Client">
+      <HintPath>..\Web\NFineuse\Microsoft.AspNet.SignalR.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\Web\NFineuse\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\Web\NFineuse\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\Web\NFineuse\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention">
+      <HintPath>..\Web\NFineuse\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Web\NFineuse\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\Web\NFineuse\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NVelocity">
+      <HintPath>..\Web\NFineuse\NVelocity.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp">
+      <HintPath>..\Web\NFineuse\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Charting">
+      <HintPath>..\Web\NFineuse\PdfSharp.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Common">
+      <HintPath>..\Web\NFineuse\ServiceStack.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\Web\NFineuse\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Redis">
+      <HintPath>..\Web\NFineuse\ServiceStack.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\Web\NFineuse\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Web\NFineuse\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cache.Factory\CacheFactory.cs" />
+    <Compile Include="Cache.Memcache\Memchace.cs" />
+    <Compile Include="Cache.Redis\Cache.cs" />
+    <Compile Include="Cache.Redis\RedisCache.cs" />
+    <Compile Include="Cache.Redis\RedisConfigInfo.cs" />
+    <Compile Include="Cache\Cache.cs" />
+    <Compile Include="Cache\ICache.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util.Extension\Extensions.Convert.cs" />
+    <Compile Include="Util.Extension\Extensions.DateTime.cs" />
+    <Compile Include="Util.Extension\Extensions.Format.cs" />
+    <Compile Include="Util.Extension\Extensions.Nullable.cs" />
+    <Compile Include="Util.Extension\Extensions.Validate.cs" />
+    <Compile Include="Util.Extension\LinqExtensions.cs" />
+    <Compile Include="Util\Attributes\EntityAttribute.cs" />
+    <Compile Include="Util\Attributes\EnumAttribute.cs" />
+    <Compile Include="Util\CommonHelper.cs" />
+    <Compile Include="Util\Comparint.cs" />
+    <Compile Include="Util\Compress\GZip.cs" />
+    <Compile Include="Util\Config\Config.cs" />
+    <Compile Include="Util\Const.cs" />
+    <Compile Include="Util\DataHelper.cs" />
+    <Compile Include="Util\Enums\DataType.cs" />
+    <Compile Include="Util\ExpressionHelper.cs" />
+    <Compile Include="Util\File\DirFileHelper.cs" />
+    <Compile Include="Util\File\Excel\ExcelHelper.cs" />
+    <Compile Include="Util\File\FileDownHelper.cs" />
+    <Compile Include="Util\File\Pdf\PDFOperation.cs" />
+    <Compile Include="Util\HttpMethods.cs" />
+    <Compile Include="Util\Ioc\TinyIoc.cs" />
+    <Compile Include="Util\Ioc\UnityIocHelper.cs" />
+    <Compile Include="Util\IPLocation.cs" />
+    <Compile Include="Util\Json.cs" />
+    <Compile Include="Util\MailHelper.cs" />
+    <Compile Include="Util\Message\DataAccessException.cs" />
+    <Compile Include="Util\Message\ExceptionMessage.cs" />
+    <Compile Include="Util\Net.cs" />
+    <Compile Include="Util\Security\DESEncrypt.cs" />
+    <Compile Include="Util\Security\Md5Helper.cs" />
+    <Compile Include="Util\Serialize.cs" />
+    <Compile Include="Util\SignalR\SendHubs.cs" />
+    <Compile Include="Util\SmsHelper.cs" />
+    <Compile Include="Util\Str.cs" />
+    <Compile Include="Util\Sys.cs" />
+    <Compile Include="Util\Time.cs" />
+    <Compile Include="Util\ValidateUtil.cs" />
+    <Compile Include="Util\WebControl\AjaxResult.cs" />
+    <Compile Include="Util\WebControl\GridTree\TreeGridEntity.cs" />
+    <Compile Include="Util\WebControl\GridTree\TreeGridJson.cs" />
+    <Compile Include="Util\WebControl\Grid\GridColumnModel.cs" />
+    <Compile Include="Util\WebControl\Pagination.cs" />
+    <Compile Include="Util\WebControl\QueryTree.cs" />
+    <Compile Include="Util\WebControl\TreeGrid\TreeGrid.cs" />
+    <Compile Include="Util\WebControl\TreeGrid\TreeGridModel.cs" />
+    <Compile Include="Util\WebControl\TreeView\TreeView.cs" />
+    <Compile Include="Util\WebControl\TreeView\TreeViewModel.cs" />
+    <Compile Include="Util\WebControl\Tree\ACETreeEntity.cs" />
+    <Compile Include="Util\WebControl\Tree\AcTree.cs" />
+    <Compile Include="Util\WebControl\Tree\AreaTree.cs" />
+    <Compile Include="Util\WebControl\Tree\DataTableTree.cs" />
+    <Compile Include="Util\WebControl\Tree\RescTree.cs" />
+    <Compile Include="Util\WebControl\Tree\TreeEntity.cs" />
+    <Compile Include="Util\WebControl\Tree\TreeJson.cs" />
+    <Compile Include="Util\NVelocity\VelocityHelper.cs" />
+    <Compile Include="Util\WebControl\Tree\TreeSelect.cs" />
+    <Compile Include="Util\WebControl\Tree\TreeSelectModel.cs" />
+    <Compile Include="Util\WebHelper.cs" />
+    <Compile Include="Util\Web\HtmlDialog.cs" />
+    <Compile Include="Util\Web\MutiplySearch.cs" />
+    <Compile Include="Util\Web\PathHelpers.cs" />
+    <Compile Include="Util\Web\Result.cs" />
+    <Compile Include="Util\Web\ResultStatus.cs" />
+    <Compile Include="Util\Web\Result`.cs" />
+    <Compile Include="Util\WebControl\SqlFilter.cs" />
+    <Compile Include="Util\Web\StaticContentExtension.cs" />
+    <Compile Include="Util\Web\VerifyCodeGenerator.cs" />
+    <Compile Include="Util\Web\WebHelper.cs" />
+    <Compile Include="Util\Web\WebViewPageBase.cs" />
+    <Compile Include="Util\wfselectoption.cs" />
+    <Compile Include="Util\XmlHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\basedal\basedal.csproj">
+      <Project>{d3860a6e-60df-4c5d-9613-47e3c594fe18}</Project>
+      <Name>basedal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IDAL\Idal.csproj">
+      <Project>{de1d4721-54e2-452f-8bd3-379bd65c3eca}</Project>
+      <Name>Idal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\model\model.csproj">
+      <Project>{77372b57-7338-4ea7-bd05-f3b1ac8895b6}</Project>
+      <Name>model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tool\tool.csproj">
+      <Project>{ec6bb09c-b0b6-424d-b1d8-ab48193bb972}</Project>
+      <Name>tool</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

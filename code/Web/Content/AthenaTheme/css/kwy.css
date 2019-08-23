@@ -1,0 +1,295 @@
+/*------------------------登陆页面-------------------------------*/
+.k_head
+{
+    box-shadow: 0px 1px 3px 0 rgba(0,0,0,0.1);
+    background-color: #A2C5FF;
+    min-height: 56px;
+    line-height: 56px;
+}
+
+.k_col-left
+{
+    color: #003940;
+    height: 100%;
+}
+
+.k_user-left-box
+{
+    padding: 20px 15px 10px 25px;
+}
+
+    .k_user-left-box img
+    {
+        border-radius: 18%;
+        background-clip: padding-box;
+        border: 3px solid #fff;
+        width: 70px;
+    }
+
+.k_user-box
+{
+    /*color:#fff;*/
+    padding-left: 0px;
+    padding-top: 10px;
+}
+
+.k_pull-left
+{
+    color: white;
+    float: left!important;
+}
+
+    .k_pull-left p
+    {
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0px 25px;
+    }
+
+.k_pull-right
+{
+    float: right!important;
+}
+/*--------------------------------------登陆页面end-----------------------------------------*/
+
+/*--事件（Events）进程--*/
+.k_alert
+{
+    width: 100%; 
+    min-height: 50px; 
+    margin-top: 10px; 
+    border-radius: 5px;
+}
+.k_alert_blue
+{
+    background: #d9edf7; 
+    border: 1px solid #bce8f1; 
+}
+.k_alert_red
+{
+    background: #f2dede; 
+    border: 1px solid #eed3d7; 
+}
+.k_alert_green
+{
+    background: #dff0d8; 
+    border: 1px solid #d6e9c6; 
+}
+.k_alert_yellow
+{
+    background: #fcf8e3; 
+    border: 1px solid #fbeed5; 
+}
+.k_alert_gray
+{
+    background: #E6E6E6; 
+    border: 1px solid #CCCCCC; 
+}
+.k_alert_title
+{
+    padding: 10px 5px 0px 5px; 
+    font-size: 17.5px; 
+    font-weight: bold;
+}
+.k_alert_title_blue
+{
+    background: #d9edf7; 
+    color: #3a87ad; 
+}
+.k_alert_title_red
+{
+    background: #f2dede; 
+    color: #b94a48; 
+}
+.k_alert_title_green
+{
+    background: #dff0d8; 
+    color: #468847; 
+}
+.k_alert_title_yellow
+{
+    background: #fcf8e3; 
+    color: #c09853; 
+}
+.k_alert_title_gray
+{
+    background: #E6E6E6; 
+    color: #999999; 
+}
+.k_alert_content
+{
+    padding: 5px; 
+}
+.k_alert_content_blue
+{
+    color: #3a87ad
+}
+.k_alert_content_red
+{
+    color: #b94a48
+}
+.k_alert_content_green
+{
+    color: #468847;
+}
+.k_alert_content_yellow
+{
+    color: #c09853;
+}
+.k_alert_content_gray
+{
+    color: #999999;
+}
+/*--事件（Events）进程end--*/
+
+/*----------表格-----------*/
+.k_table
+{
+    width:100%;
+}
+.k_table tr th
+{
+    width:70px !important;
+    height:40px;
+}
+.k_table tr th,.k_table tr td
+{
+    /*text-align:center;*/
+}
+.k_table,.k_table tr th, .k_table tr td
+{
+    border:1px solid;
+}
+
+.k_input
+{
+    width:100%;
+    height:100%;
+}
+/*----------表格end-----------*/
+
+/*----------简历-----------*/
+.body_background_color_gray
+{
+    background-color:#F7F7F7;
+}
+.k_resume
+{
+    width:210mm;
+    background-color:#fff;
+    padding:25.4mm 31.7mm;
+    margin:0px auto;
+    box-shadow:10px 10px 11px #CCCCCC;
+}
+.k_one_three
+{
+    width:230px;
+}
+.k_two_three
+{
+    width:510px;
+}
+.k_full_three
+{
+    width:760px;
+}
+.k_one_three, .k_two_three, .k_full_three
+{
+    display:inline;
+    float:left;
+    margin:0 10px;
+}
+.k_photo_frame
+{
+    background:url(../media/frame-front.png) no-repeat center center;
+    width:196px;
+    height:196px;
+    padding:16px 17px 47px 17px;
+}
+.k_group_container
+{
+    padding-bottom:15px;
+}
+.k_h1 {
+	font-size: 48px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 100px;
+	color: #272829;
+	text-shadow: 0px 1px 0px #47484a, 0px -1px 0px #131414;
+}
+.k_h2 {
+	font-size: 24px;
+	line-height: 40px;
+	color: #373737;
+	font-family: 'Muli', Helvetica, Arial;
+	font-weight: normal;
+	text-shadow: 0px 1px 0px #fff;
+	border-bottom: solid 1px #cecece;
+	margin-bottom: 15px;
+}
+.k_h3 {
+	font-size: 14px;
+	font-family: Helvetica, Arial;
+	font-weight: bold;
+	color: #373737;
+	margin-bottom: 5px;
+}
+.k_h4 {
+	font-size: 12px;
+	font-family: Helvetica, Arial;
+	font-weight: bold;
+	color: #373737;
+	line-height: 14px;
+}
+.k_p {
+	margin-bottom: 10px;
+	line-height: 18px;
+}
+.k_resume_group
+{
+    height:14px;
+    margin-bottom: 15px;
+	line-height: 14px;
+}
+
+.k_resume_label {
+	font-size: 14px;
+	font-family: Helvetica, Arial;
+	font-weight: bold;
+	color: #373737;
+	1width: 20%;
+	float: left;
+    margin-bottom:15px;
+    margin-right:20px;
+}
+
+.k_resume_info {
+	width: 30%;
+	float: left;
+}
+.k_resume_bar{
+	width: 100%;
+	margin: 3px 0;
+	height: 8px;
+	position: relative;
+}
+.k_level1 {width: 10%;}
+.k_level2 {width: 20%;}
+.k_level3 {width: 30%;}
+.k_level4 {width: 40%;}
+.k_level5 {width: 50%;}
+.k_level6 {width: 60%;}
+.k_level7 {width: 70%;}
+.k_level8 {width: 80%;}
+.k_level9 {width: 90%;}
+.k_level10 {width: 100%;}
+
+/*----------简历end-----------*/
+
+/*---------------------Diana Tree 样式-----------------------*/
+.DianaTable
+{
+    background-color:green;
+}
+/*---------------------End Diana Tree 样式-----------------------*/

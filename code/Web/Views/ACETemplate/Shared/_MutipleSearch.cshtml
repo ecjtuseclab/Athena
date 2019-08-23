@@ -1,0 +1,55 @@
+﻿
+   @Html.Partial("_MutipleSearch-js")
+<form id="formSearch">
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">高级查询</a></li>
+        </ul>
+        <div style="padding-top: 20px; margin-right: 30px;">
+            <div id="multipleSearchDialog">  
+            <table class="table table-hover"  id="formTable">  
+                <thead>  
+                    <tr>  
+                        <th>查询条件</th>  
+                        <th>查询方式</th>  
+                        <th>查询值</th> 
+                        <th><input type="button" value="+" class="btn btn-primary" id="addrule" onclick="Addrule()"></th> 
+                        <th><input type="button" value="高级查询" class="btn btn-primary" id="MultiplySearch" onclick="submitForm()"></th> 
+                    </tr>  
+                </thead>  
+                <tbody id="bodyTable">  
+                    <tr>  
+                        <td>  
+                            <select id="searchField" class="form-control required">  
+                                <option value="id">编号</option>  
+                                <option value="groupname">组名</option>  
+                                <option value="groupcode">组编码</option>   
+                            </select>  
+                        </td>  
+                        <td>  
+						<select  id="searchOper" class="form-control required">
+							<option value="eq" selected="selected">等于</option>
+							<option value="ne">不等</option>
+							<option value="bw">开始于</option>
+							<option value="bn">不开始于</option>
+							<option value="ew">结束于</option>
+							<option value="en">不结束于</option>
+							<option value="cn">包含</option>
+							<option value="nc">不包含</option>
+							<option value="nu">空值</option>
+							<option value="nn">非空值</option>
+							<option value="in">包含</option>
+							<option value="ni">不包含</option>
+						</select>
+                        </td>  
+                        <td>  
+                            <input type="text" id="searchString" class="form-control"></input>  
+                        </td>  
+                    </tr>  
+                   
+                </tbody>  
+            </table>  
+        </div>  
+        </div>
+    </div>
+</form>

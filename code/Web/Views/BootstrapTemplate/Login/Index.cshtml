@@ -1,0 +1,182 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athena快速开发平台</title>
+    <link href="~/Content/AthenaTheme/css/style.css" rel="stylesheet" />
+    <style type="text/css">
+        body
+        {
+            height: 100%;
+            background: #87cbf9;
+            overflow: hidden;
+        }
+
+        canvas
+        {
+            z-index: -1;
+            position: absolute;
+        }
+
+        #fm
+        {
+            margin: 0;
+            /*padding: 10px 30px;*/
+            padding: 10px 30px;
+        }
+
+        .ftitle
+        {
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+            padding: 5px 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .fitem
+        {
+            margin-bottom: 5px;
+        }
+
+            .fitem label
+            {
+                display: inline-block;
+                width: 80px;
+            }
+    </style>
+    <script src="~/Content/js/jquery/jquery-2.1.1.min.js"></script>
+    <script src="~/Content/AthenaTheme/js/verificationNumbers.js"></script>
+    <script src="~/Content/AthenaTheme/js/Validation.js"></script>
+    <script src="~/Content/AthenaTheme/js/Particleground.js"></script>
+
+    @*<script src="~/Content/js/cookie/jquery.cookie.js"></script>
+    <script src="~/Content/js/md5/jquery.md5.js"></script>*@
+
+</head>
+<body>
+    <div id="loginbypwd" class="admin_login" style="display: block;">
+        <form id="loginFormId" method="post">
+            <dt>
+                <strong>Athena快速开发平台</strong> 
+                @*<em>腾杰工作室出品</em> *@
+            </dt>
+            <dd class="user_icon">
+                <input id="txt_account" name="name" type="text" placeholder="用户名/手机号/邮箱" class="login_txtbx easyui-validatebox"
+                    required="true" value="Athena">
+            </dd>
+            <dd class="pwd_icon">
+                <input id="txt_password" name="password" type="password" placeholder="登录密码" class="login_txtbx easyui-validatebox"
+                    required="true" value="123456">
+            </dd>
+            <dd class="val_icon">
+                <div class="checkcode">
+                    <input type="text" id="J_codetext" placeholder="输入验证码" maxlength="4" class="login_txtbx">
+                </div>
+                <img id="imgcode" class="authcode" src="~/Login/GetAuthCode" style="margin-left:-50px;" width="80" height="50" />
+                <input id="switchCode" type="button" value="刷新验证码" class="ver_btn">
+            </dd>
+            <dd>
+            <button class="submit_btn" id="login_button">
+                <span>立即登陆</span></button>
+            </dd>
+            <dd>
+            <p>
+              @*  <a href="index.ashx?ctrl=login&action=login" target="_blank" style="color: white">忘记密码?</a>*@
+            </p>
+        </dd>
+        </form>
+        
+        
+        
+        <dd>
+            <p>
+                适用浏览器：360、FireFox、Chrome、Safari、Opera、傲游、搜狗、世界之窗. 不支持IE8及以下浏览器。
+            </p>
+        </dd>
+    </div>
+    <script type="text/javascript">
+        (function ($) {
+            $.login = {
+                formMessage: function (msg) {
+                    $('.login_tips').find('.tips_msg').remove();
+                    $('.login_tips').append('<div class="tips_msg"><i class="fa fa-question-circle"></i>' + msg + '</div>');
+                },
+                loginClick: function () {
+                    var $username = $("#txt_account");
+                    var $password = $("#txt_password");
+                    var $code = $("#J_codetext");
+                    if ($username.val() == "") {
+                        $username.focus();
+                        $.login.formMessage('请输入用户名/手机号/邮箱。');
+                        return false;
+                    } else if ($password.val() == "") {
+                        $password.focus();
+                        $.login.formMessage('请输入登录密码。');
+                        return false;
+                    }
+                        else if ($code.val() == "") {
+                            $code.focus();
+                            $.login.formMessage('请输入验证码。');
+                            return false;
+                        }
+                    else {
+                        $("#login_button").attr('disabled', 'disabled').find('span').html("loading...");
+                        $.ajax({
+                            url: "/Login/CheckLogin",
+                            //data: { username: $.trim($username.val()), password: $.trim($password.val()) },
+                            data: { username: $.trim($username.val()), password: $.trim($password.val()), code: $.trim($code.val()) },
+                            type: "post",
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.success == "true") {
+                                    $("#login_button").find('span').html("登录成功，正在跳转...");
+                                    window.setTimeout(function () {
+                                        window.location.href = "/Home/Index";
+                                    }, 500);
+                                } else {
+                                    $("#login_button").removeAttr('disabled').find('span').html("登录");
+                                    $("#switchCode").trigger("click");
+                                    $code.val('');
+                                    $.login.formMessage(data.message);
+                                }
+                            }
+                        });
+                    }
+                },
+                init: function () {
+                    //粒子背景特效
+                    //$('body').particleground({
+                    //    dotColor: '#5cbdaa',
+                    //    lineColor: '#5cbdaa'
+                    //});
+
+                    $("#switchCode").click(function () {
+                        $("#imgcode").attr("src", "/Login/GetAuthCode?time=" + Math.random());
+                    });
+                    $("#login_button").click(function () {
+                        $.login.loginClick();
+                    });
+
+                    document.onkeydown = function (e) {
+                        if (!e) e = window.event;
+                        if ((e.keyCode || e.which) == 13) {
+                            document.getElementById("login_button").focus();
+                            document.getElementById("login_button").click();
+                        }
+                    }
+                }
+            };
+            $(function () {
+                $.login.init();
+            });
+        })(jQuery);
+    </script>
+</body>
+</html>

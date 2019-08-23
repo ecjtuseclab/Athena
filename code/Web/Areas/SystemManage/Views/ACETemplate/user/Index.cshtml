@@ -1,0 +1,195 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_ACEIndex.cshtml";
+}
+@this.Partial("Index-js")
+@this.RefStyle("~/Content/js/wdtree/tree.css")
+@this.RefScript("~/Content/js/wdtree/tree.js")
+@this.RefStyle("~/Content/js/select2/select2.min.css")
+@this.RefScript("~/Content/js/select2/select2.min.js")
+@this.RefStyle("~/Content/js/wizard/wizard.css")
+@this.RefScript("~/Content/js/wizard/wizard.js")
+<script>
+    var roleList = @this.RawSerialize(this.ViewBag.RoleList)
+</script>
+<div class="topPanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$ace.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+        <div class="btn-group">@*,attr:{disabled:!DataTable.SelectedModel()}OpenRevisePasswordDialog*@
+          @*   @foreach (var action in this.ViewBag.actions)
+            {
+               <button class="btn btn-primary" data-bind="click:@action.actionname ,attr:{disabled:!DataTable.SelectedModel()}"><i class="@action.actionurl"></i>@action.actionparam</button>
+            }*@
+            <button class="btn btn-primary" data-bind="click:Edit ,attr:{disabled:!DataTable.SelectedModel()}"><i class="fa fa-pencil-square-o"></i>修改</button>
+            <button class="btn btn-primary" data-bind="click:Delete,attr:{disabled:!DataTable.SelectedModel()}"><i class="fa fa-trash-o"></i>删除</button>
+            <button class="btn btn-primary" data-bind="click:Add"><i class="fa fa-plus"></i>添加</button>
+            <button class="btn btn-primary" data-bind="click:Detail,attr:{disabled:!DataTable.SelectedModel()}"><i class="fa fa-pencil-square-o"></i>详情</button>
+            <button class="btn btn-primary" data-bind="click:OpenRevisePasswordDialog,attr:{disabled:!DataTable.SelectedModel()}"><i class="fa fa-key"></i>重置密码</button>
+            
+       </div>
+    </div>
+    <div class="search">
+        <table>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <input id="txt_keyword" type="text" class="form-control" placeholder="id/用户名" style="width: 200px;" data-bind="value:SearchModel().keyword">
+                        <span class="input-group-btn">
+                            <button id="btn_search" type="button" class="btn  btn-primary" data-bind="click:Search"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+  
+<div class="table-responsive">
+  
+    <table class="table table-hover" data-bind="with:DataTable">
+        <thead>
+            <tr>
+                <th style="width:20px;"></th>
+                <th>用户名</th>
+                <th>角色</th>
+                <th>分组</th>
+                @*<th>公钥</th>
+                <th>私钥</th>
+                <th>图片</th>*@
+            </tr>
+        </thead>
+        <tbody data-bind="foreach:Models">
+            <tr data-bind="click:$parent.SelectRow">
+                <td data-bind="text:$parent.GetOrdinal($index())"></td>
+                <td data-bind="text:username,tootip:{title:'xzxx',trigger:'hover',placement:'right'}"  ></td>           
+                <td data-bind="text:$ace.getFuzzyContent(rolelist()),attr:{herf:'#',title:rolelist}"></td>
+                <td data-bind="text:$ace.getFuzzyContent(grouplist()),attr:{herf:'#',title:grouplist}"></td>
+                             
+            </tr>
+        </tbody>
+        @this.Partial("_tfoot")
+    </table>
+</div>
+
+@Html.BeginDialog(800)
+
+<div class="modal-body">
+
+
+    <form id="form1">
+        <div class="widget-body">
+            <div id="wizard" class="wizard" data-target="#wizard-steps" style="border-left: none; border-top: none; border-right: none;">
+                <ul class="steps">
+                    <li data-target="#step-1" class="active"><span class="step">1</span>用户信息<span class="chevron"></span></li>
+                    <li data-target="#step-2" ><span class="step">2</span>角色权限<span class="chevron"></span></li>
+                    <li data-target="#step-3"><span class="step">3</span>组权限<span class="chevron"></span></li>
+                </ul>
+            </div>
+            <div class="step-content" id="wizard-steps" style="border-left: none; border-bottom: none; border-right: none;">
+                <div class="step-pane active" id="step-1" style="margin: 10px; margin-bottom: 0px;">
+                    <div class="alert alert-danger" style="text-align: left; margin-bottom: 10px;">
+                        <i class="fa fa-warning alert-dismissible" style="position: relative; top: 1px; font-size: 15px; padding-right: 5px;"></i>
+                        请填写用户信息，用于创建或修改用户信息！
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">表单信息</h3>
+                        </div>
+                        <div class="panel-body" style="width: 98%;">
+                            <table class="form">
+                                <tr>
+                                    <th class="formTitle">用户名称<span style="color:red;">*</span></th>
+                                    <td class="formValue">
+                                        <input id="username" name="username" type="text" class="form-control required" placeholder="请输入用户名称" data-bind="value:Model().username" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="formTitle">用户密码<span style="color:red;">*</span></th>
+                                    <td class="formValue">
+                                        <input id="password" name="password"  type="password"  class="form-control required" placeholder="请输入密码" data-bind="value:Model().password" />
+                                    </td>
+                                </tr>
+                             
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-pane" id="step-2">
+                    <div id="permissionTree"></div>
+                </div>
+                <div class="step-pane" id="step-3">
+                    <div id="permissionGroupTree"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<div class="modal-footer" id="wizard-actions">
+    <a id="btn_last" disabled class="btn btn-default btn-prev">上一步</a>
+    <a id="btn_next" class="btn btn-default btn-next">下一步</a>
+    <a id="btn_finish" class="btn btn-default" style="display: none;" data-bind="click:Save">完成</a>
+    
+</div>
+
+@Html.EndDialog()
+
+@using (Html.Dialog("RevisePasswordDialog", "RevisePasswordDialog", 500))
+{
+    <form id="RevisePasswordForm">
+        <table class="form">
+            <tr>
+                 <td class="formTitle">用户名<span style="color:red;">*</span></td>
+                    <td class="formValue">
+                        <input name="username" readonly="readonly"  type="text" class="form-control required" data-bind="value:Model().username" />
+                    </td>
+            </tr>
+            <tr>
+                <td class="formTitle">密码<span style="color:red;">*</span></td>
+                <td class="formValue">
+                    <input id="NewUserPassword" name="password" type="password" class="form-control required" placeholder="请输入新密码" data-bind="value:Model().password" />
+                </td>
+            </tr>
+        </table>
+    </form>
+}
+
+@using (Html.Dialog("DetailDialog", "DetailDialog", 800))
+{
+    <form id="DetailForm">
+        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+            <div style="padding-top: 20px; margin-right: 30px;">
+                <table class="form">
+                    <tr>
+                        <td class="formTitle">用户名：</td>
+                        <td class="formValue">
+                            <label class="form-control" data-bind="text:Model().username"></label>
+                        </td>                        
+                    </tr>
+                    <tr>
+                        <td class="formTitle">密码：</td>
+                        <td class="formValue">
+                            <label class="form-control" data-bind="text:Model().password"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">角色：</td>
+                        <td class="formValue">
+                            <label class="form-control" data-bind="text:Model().rolelist"></label>
+                        </td>                        
+                    </tr>
+                    <tr>
+                        <td class="formTitle">分组：</td>
+                        <td class="formValue">
+                            <label class="form-control" data-bind="text:Model().grouplist"></label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </form>
+}

@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    @Html.RefScript("~/Content/js/jquery/jquery-1.11.1.js")
+    @*@Html.RefScript("~/Content/js/framework-ui.js")*@
+
+    @Html.RefStyle("~/Content/js/bootstrap/bootstrap.min.css")
+    @Html.RefScript("~/Content/js/bootstrap/bootstrap.min.js")
+
+    @Html.RefStyle("~/Content/css/framework-font.css")
+    @*@Html.RefStyle("~/Content/css/framework-theme.css")*@
+    @Html.RefStyle("~/Content/css/framework-ui.css")
+
+    @Html.RefScript("~/Content/knockout/knockout-latest.js")
+    @Html.RefScript("~/Content/knockout/knockout.mapping-latest.js") 
+    @Html.RefScript("~/Content/js/kohelper.js")
+
+    @Html.RefScript("~/Content/validate/jquery.validate.min.js")
+    @Html.RefScript("~/Content/My97DatePicker/WdatePicker.js")
+
+    @Html.RefStyle("~/Content/js/dialog/dialog.css")
+    @Html.RefScript("~/Content/js/dialog/dialog.js")
+    @Html.RefScript("~/Content/js/ace.js")
+
+    @Html.RefScript("~/Content/js/UEditor/ueditor.config.js")
+    @Html.RefScript("~/Content/js/UEditor/ueditor.all.min.js")
+    @Html.RefStyle("~/Content/js/UEditor/themes/iframe.css")
+    @Html.RefScript("~/Content/js/UEditor/lang/zh-cn/zh-cn.js")
+</head>
+<body>
+    @RenderBody()
+@*    @Html.AntiForgeryToken()*@
+</body>
+</html>

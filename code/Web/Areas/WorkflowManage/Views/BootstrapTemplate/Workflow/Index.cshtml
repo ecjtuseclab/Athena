@@ -1,0 +1,183 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+
+<script>
+    $(function () {
+        gridList();
+    })
+    function gridList() {
+        var $gridList = $("#gridList");
+        //$gridList.dataGrid({
+        //    url: "/WorkflowManage/Workflow/GetGridJson",
+        //    height: $(window).height() - 96,
+        //    colModel: [
+        //        { label: "主键", name: "id", hidden: true, key: true },
+        //        { label: '工作流名称', name: 'wfname', width: 150, align: 'left' },
+        //        { label: '工作流描述', name: 'wfmemo', width: 150, align: 'left' },
+        //        { label: '启用时间', name: 'wfbegintime', width: 150, align: 'left' },
+        //        { label: '有效终止时间', name: 'wfstoptime', width: 150, align: 'left' },
+        //        { label: '工作流作用表', name: 'wfownertable', width: 150, align: 'left' },
+        //        { label: '工作流影子表', name: 'wflogtable', width: 150, align: 'left' },
+        //        {
+        //            label: '工作流状态', name: 'wfstatus', width: 150, align: 'left',
+        //            formatter: function (cellvalue) {
+        //                return cellvalue == 1 ? "启用" : "未启用";
+        //            }
+        //        },
+        //        {
+        //            label: ' 锁定状态 ', name: 'wflock', width: 150, align: 'left',
+        //            formatter: function (cellvalue) {
+        //                return cellvalue == 1 ? "锁定" : "未锁定";
+        //            }
+        //        },
+        //        { label: '业务表工作流字段', name: 'wffieldname', width: 150, align: 'left' },
+        //    ],
+        //    pager: "#gridPager",
+        //    sortname: 'id asc',
+        //    viewrecords: true
+        //});
+        $("#gridList").jqGrid({
+            url: "/WorkflowManage/Workflow/GetGridJson",
+            datatype: "json",
+            height: $(window).height() - 126,
+            colNames: ['主键', '工作流名称', '启用时间', '有效终止时间', '工作流作用表', '工作流影子表', '工作流状态', '锁定状态', '业务表工作流字段'],
+            colModel: [
+                { label: "主键", name: "id", hidden: true, key: true },
+                { label: '工作流名称', name: 'wfname', width: 100, align: 'left' },
+                { label: '启用时间', name: 'wfbegintime', width: 150, align: 'left' },
+                { label: '有效终止时间', name: 'wfstoptime', width: 150, align: 'left' },
+                { label: '工作流作用表', name: 'wfownertable', width: 100, align: 'left' },
+                { label: '工作流影子表', name: 'wflogtable', width: 100, align: 'left' },
+                {
+                    label: '工作流状态', name: 'wfstatus', width: 100, align: 'left',
+                    formatter: function (cellvalue) {
+                        return cellvalue == 1 ? "启用" : "未启用";
+                    }
+                },
+                {
+                    label: ' 锁定状态 ', name: 'wflock', width: 100, align: 'left',
+                    formatter: function (cellvalue) {
+                        return cellvalue == 1 ? "锁定" : "未锁定";
+                    }
+                },
+                { label: '业务表工作流字段', name: 'wffieldname', width: 100, align: 'left' },
+            ],
+            pager: '#gridPager',
+            viewrecords: true,//sortorder
+            sortname: " id desc",
+        });
+        //$("#gridList").jqGrid('navGrid', '#gridPager', { edit: false, add: false, del: false }, {}, {}, {}, { multipleSearch: true, multipleGroup: true });
+        $("#btn_search").click(function () {
+            $gridList.jqGrid('setGridParam', {
+                postData: { keyword: $("#txt_keyword").val() },
+            }).trigger('reloadGrid');
+            
+        });
+    }
+    function btn_add() {
+        $.modalOpen({
+            id: "Form",
+            title: "新增工作流",
+            url: "/WorkflowManage/Workflow/Form",
+            width: "700px",
+            height: "510px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    function btn_edit() {
+        var keyValue = $("#gridList").jqGridRowValue().id;
+        $.modalOpen({
+            id: "Form",
+            title: "修改角色",
+            url: "/WorkflowManage/Workflow/Form?keyValue=" + keyValue,
+            width: "700px",
+            height: "510px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    function btn_delete() {
+        $.deleteForm({
+            url: "/WorkflowManage/Workflow/DeleteForm",
+            param: { keyValue: $("#gridList").jqGridRowValue().id },
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+    function btn_details() {
+        var keyValue = $("#gridList").jqGridRowValue().id;
+        $.modalOpen({
+            id: "Details",
+            title: "查看角色",
+            url: "/WorkflowManage/Workflow/Details?keyValue=" + keyValue,
+            width: "700px",
+            height: "510px",
+            btn: null,
+        });
+    }
+    function btn_copyandpaste() {
+        $.deleteForm({
+            url: "/WorkflowManage/Workflow/copyAndPasteForm",
+            param: { keyValue: $("#gridList").jqGridRowValue().id },
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+    function btn_ProcessDesign() {
+        var keyValue = $("#gridList").jqGridRowValue().id;
+        window.location.href = "WorkflowVisualization?wfid=" + keyValue;
+    }
+</script>
+<div class="topPanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+         <div class="btn-group">
+        <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新建工作流节点</a>
+        <a id="NF-ProcessDesign"  class="btn btn-primary dropdown-text" onclick="btn_ProcessDesign()"><i class="fa fa-pencil"></i>设计流程</a>
+        <a id="NF-edit" class="btn btn-primary dropdown-text" onclick="btn_edit()"><i class="fa fa-pencil"></i>修改节点</a>
+        <a id="NF-delete" class="btn btn-primary dropdown-text" onclick="btn_delete()"><i class="fa fa-trash"></i>删除节点</a>
+        <a id="NF-Details" class="btn btn-primary dropdown-text" onclick="btn_details()"><i class="fa fa-search"></i>查看节点</a>
+        </div>
+        <div class="operate">
+           @* <ul class="nav nav-pills">
+                <li class="first">已选中<span>1</span>项</li>
+                 <li><a id="NF-ProcessDesign"  onclick="btn_ProcessDesign()"><i class="fa fa-pencil-square-o"></i>设计流程</a></li>
+                <li><a id="NF-edit"  onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改节点</a></li>
+                <li><a id="NF-delete"  onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除节点</a></li>
+                <li><a id="NF-Details"  onclick="btn_details()"><i class="fa fa-search-plus"></i>查看节点</a></li>
+              <li><a id="NF-copyAndPaste"  onclick="btn_copyandpaste()"><i class="fa fa-search-plus"></i>复制粘贴</a></li>
+            </ul>*@
+            <a href="javascript:;" class="close"></a> 
+        </div>
+        @*<script>$('.toolbar').authorizeButton()</script>*@
+    </div>
+    <div class="search">
+        <table>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <input id="txt_keyword" type="text" class="form-control" placeholder="节点名称" style="width: 200px;">
+                        <span class="input-group-btn">
+                            <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridList"></table>
+    <div id="gridPager"></div>
+</div>
+@* <li><a id="NF-ProcessDesign"  onclick="btn_ProcessDesign()"><i class="fa fa-pencil-square-o"></i>设计流程</a></li>*@

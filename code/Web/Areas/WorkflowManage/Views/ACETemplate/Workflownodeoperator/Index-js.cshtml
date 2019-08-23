@@ -1,0 +1,96 @@
+﻿<script>
+
+    var _vm;
+    $(function () {
+        var vm = new ViewModel();
+        _vm = vm;
+        ko.applyBindings(vm);
+        vm.Init();
+    });
+
+    function ViewModel() {
+        var me = this;
+        ViewModelBase.call(me);
+        vmExtend.call(me);
+
+        me.DeleteUrl = "@this.ContentUrl("~/WorkflowManage/Workflownodeoperator/Delete")";
+        //me.DataTable = new DataTableBase(me);
+        me.Dialog = new Dialog(me);
+    }
+    function vmExtend() {
+        var me = this;
+        me.Init = function () {
+            me.LoadModels();
+        }
+        me.LoadModels = function (page) {
+            me.DataTable.SelectedModel(null);
+            var params = me.SearchModel();
+            params.page = page || 1;
+            $ace.get("@this.ContentUrl("~/WorkflowManage/Workflownodeoperator/GetModels")", params, function (result) {
+                console.log(result.Data);
+                me.DataTable.SetPagedData(result.Data);
+            }
+         );
+        }
+    }
+    function Dialog(vm) {
+        var me = this;
+        DialogBase.call(me);
+        me.WorkflowNodeActionList = _oba();
+        me.AllWorkflowNodeActionList = wfnodeactionList;
+        me.OnOpen = function ()
+        {
+            var model = me.EditModel();
+            if (model) {
+                console.log(_vm);
+                var bindModel = $ko.toJS(model);
+                console.log(bindModel.nodeactionid);
+
+                var _wfna = me.AllWorkflowNodeActionList.where(function (a) {
+                    return a.id == bindModel.nodeactionid;
+                });
+                var m = {};
+                m.wfid = _wfna[0].wfid;
+                m.nodeactionid = bindModel.nodeactionid;
+                m.operatorid = bindModel.operatorid;
+                m.operatortype = bindModel.operatortype;
+                m.begintime = bindModel.begintime;
+                m.endtime = bindModel.endtime;
+                m.operatorstatus = bindModel.operatorstatus;
+                m.operatorlock = bindModel.operatorlock
+                me.Model(m);
+            }
+        }
+        me.OnSave = function () {
+            var model = me.Model();
+
+            if (!$('#form1').formValid()) {
+                return false;
+            }
+            if (me.EditModel()) {
+                $ace.post("@this.ContentUrl("~/WorkflowManage/Workflownodeoperator/Update")", model, function (result) {
+
+                    $ace.msg(result.Msg);
+                    me.Close();
+                    vm.LoadModels();
+                }
+               );
+            }
+            else {
+                $ace.post("@this.ContentUrl("~/WorkflowManage/Workflownodeoperator/Add")", model, function (result) {
+                    $ace.msg(result.Msg);
+                    me.Close();
+                    vm.LoadModels();
+                }
+             );
+            }
+        }
+        me.OnWorkflowChange = function () {
+            var selectedWorkflowId = me.Model().wfid;
+            var workflowNodeActionList = me.AllWorkflowNodeActionList.where(function (a) {
+                return a.wfid == selectedWorkflowId;
+            });
+            me.WorkflowNodeActionList(workflowNodeActionList);
+        }
+    }
+</script>

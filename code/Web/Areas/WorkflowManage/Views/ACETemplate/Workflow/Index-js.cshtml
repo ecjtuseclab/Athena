@@ -1,0 +1,107 @@
+﻿
+<script>
+
+    var _vm;
+    $(function () {
+        var vm = new ViewModel();
+        _vm = vm;
+        ko.applyBindings(vm);
+        vm.Init();
+    });
+
+    function ViewModel() {
+        var me = this;
+        ViewModelBase.call(me);
+        vmExtend.call(me);
+
+        me.DeleteUrl = "@this.ContentUrl("~/WorkflowManage/Workflow/Delete")";
+        //me.DataTable = new DataTableBase(me);
+        me.Dialog = new Dialog(me);
+
+        //详情页面
+        //详情页
+        me.DetailDialog = new DetailDialog(me);
+        me.Detail = function ()
+        {
+            me.DetailDialog.Open(me.DataTable.SelectedModel(), "详情");
+        }
+        me.ProcessDesign= function (me)
+        {
+            
+            var smodel = me.DataTable.SelectedModel();
+            console.log(window.location);
+            window.location.href="WorkflowVisualization?wfid="+$ko.toJS(smodel).id;
+        }
+    }
+    function vmExtend() {
+        var me = this;
+
+        me.Init = function () {
+            me.LoadModels();
+        }
+
+        me.LoadModels = function (page) {
+            me.DataTable.SelectedModel(null);
+            var params = me.SearchModel();
+            params.page = page || 1;
+            $ace.get("@this.ContentUrl("~/WorkflowManage/Workflow/GetModels")", params, function (result) {
+            
+                me.DataTable.SetPagedData(result.Data);
+            }
+          );
+        }
+    }
+    
+    //详情页对话框设置
+    function DetailDialog() {
+        var me = this;
+        DialogBase.call(me);
+
+        me.OnOpen = function () {
+            //将“保存”按钮隐藏
+            me.ShowSaveButton(false);
+            var model = me.EditModel();
+            if (model) {
+                var bindModel = $ko.toJS(model);
+                me.Model(bindModel);
+            }
+            else {
+                me.Model({});
+            }
+        }
+    }
+
+    function Dialog(vm)
+    {
+        var me = this;
+        DialogBase.call(me);
+
+
+        me.OnSave = function () {
+            var model = me.Model();
+
+            if (!$('#form1').formValid()) {
+                return false;
+            }
+
+            if (me.EditModel()) {
+                $ace.post("@this.ContentUrl("~/WorkflowManage/Workflow/Update")", model, function (result) {
+                    $ace.msg(result.Msg);
+                    me.Close();
+                    vm.LoadModels();
+                }
+               );
+            }
+            else {
+                $ace.post("@this.ContentUrl("~/WorkflowManage/Workflow/Add")", model, function (result) {
+                    $ace.msg(result.Msg);
+                    me.Close();
+                    vm.LoadModels();
+                }
+             );
+            }
+        }
+    }
+
+</script>
+

@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/SystemManage/Area/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                    $("#form1").find('.form-control').attr('readonly', 'readonly');
+                    $("#form1").find('.parentLayer').attr('disabled', true);
+                }
+                
+            });
+        }
+    });
+    function initControl() {
+        $("#parentid").bindSelect({
+            url: "/SystemManage/Area/GetTreeSelectJson"
+        });
+    }    
+</script>
+
+<form id="form1">
+    <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tr>
+                <th class="formTitle">上级<span style="color:red;">*</span></th>
+                <td class="formValue">
+                    <select id="parentid" name="parentid" class="form-control required parentLayer">
+                        <option value="0">父节点</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">名称<span style="color:red;">*</span></th>
+                <td class="formValue">
+                    <input id="fullname" name="fullname" type="text" class="form-control required" placeholder="请输入名称" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">级别<span style="color:red;">*</span></th>
+                <td class="formValue">
+                    <select id="layers" name="layers" class="form-control required parentLayer">
+                            <option value="">==请选择==</option>
+                            <option value="1" title="1">1</option>
+                            <option value="2" title="2">2</option>
+                            <option value="3" title="3">3</option>
+                            <option value="4" title="4">4</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">编号<span style="color:red;">*</span></th>
+                <td class="formValue">
+                    <input id="encode" name="encode" type="text" class="form-control required">
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>

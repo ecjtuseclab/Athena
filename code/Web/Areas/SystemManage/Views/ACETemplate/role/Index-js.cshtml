@@ -1,0 +1,170 @@
+﻿<script>
+
+    var _vm;
+    $(function () {
+        var vm = new ViewModel();
+        _vm = vm;
+        ko.applyBindings(vm);
+        vm.Init();
+    });
+
+    function ViewModel() {
+        var me = this;
+        ViewModelBase.call(me);
+        vmExtend.call(me);//读取所有数
+
+        me.DeleteUrl = "@this.ContentUrl("~/SystemManage/Role/Delete")";
+        me.DataTable = new DataTableBase(me);
+        me.Dialog = new Dialog(me);
+        //详情页
+        me.DetailDialog = new DetailDialog(me);
+        me.Details = function () {
+            me.DetailDialog.Open(me.DataTable.SelectedModel(), "详情");
+        }
+    }
+    function vmExtend() {
+        var me = this;
+
+        me.Init = function () {
+            me.LoadModels();
+        }
+
+        me.LoadModels = function (page) {
+            me.DataTable.SelectedModel(null);
+            var data = me.SearchModel();
+            data.page = page || 1;
+            $ace.get("@this.ContentUrl("~/SystemManage/Role/GetModels")", data, function (result) {
+                me.DataTable.SetModels(result.Data);
+            }
+          );
+        }
+    }
+    //详情页对话框设置
+    function DetailDialog() {
+        var me = this;
+        DialogBase.call(me);
+
+        me.OnOpen = function () {
+            //将“保存”按钮隐藏
+            me.ShowSaveButton(false);
+            var model = me.EditModel();
+            if (model) {
+                var bindModel = $ko.toJS(model);
+                me.Model(bindModel);
+            }
+            else {
+                me.Model({});
+            }
+        }
+    }
+
+    function Dialog(vm) {
+        var me = this;
+        DialogBase.call(me);
+
+
+        me.OnOpen = function () {
+            var model = me.EditModel();
+            if (model) {
+                var bindModel = $ko.toJS(model);
+                me.Model(bindModel);
+            }
+            else {
+                me.Model({ IsEnabled: true });
+            }
+
+            initControl();
+            //选中的角色ID
+            var roleId = me.Model().id;
+            //资源树的加载
+            $("#permissionTree").html(null);
+            $("#permissionTree").treeview({
+                height: 444,
+                showcheck: true,
+                url: "/SystemManage/Role/GetACEPermissionTree",
+                param: { roleId: roleId },
+                cbiconpath: "@this.ContentUrl("/Content/js/wdtree/images/icons/")"
+            });
+            //动作树的加载
+            $("#permissionActionTree").html(null);
+            $("#permissionActionTree").treeview({
+                height: 444,
+                showcheck: true,
+                url: "/SystemManage/Role/GetPermissionActionTree",
+                param: { roleId: roleId },
+                cbiconpath: "@this.ContentUrl("/Content/js/wdtree/images/icons/")"
+            });
+        }
+        //点击保存
+        me.OnSave = function () {
+            //实体
+            var model = me.Model();
+
+            if (!$('#form1').formValid()) {
+                return false;
+            }
+            //资源树的权限
+            var permissionIdArr = $("#permissionTree").getCheckedNodes();
+            var permissionIds = "";
+            var c = "";
+            for (var i = 0; i < permissionIdArr.length; i++) {
+                permissionIds += c + permissionIdArr[i];
+                c = ",";
+            }
+            //动作树的权限
+            var permissionIdActionArr = $("#permissionActionTree").getCheckedNodes();
+            var permissionActionIds = "";
+            var c = "";
+            for (var i = 0; i < permissionIdActionArr.length; i++) {
+                permissionActionIds += c + permissionIdActionArr[i];
+                c = ",";
+            }
+            //资源树的权限
+            model.permissionIds = permissionIds;
+            model.permissionActionIds = permissionActionIds;
+            //修改的保存
+            if (me.EditModel()) {
+                $ace.post("@this.ContentUrl("~/SystemManage/Role/Update")", model, function (result) {
+                    $ace.msg(result.Msg);
+                    me.Close();
+                    vm.LoadModels();
+                }
+               );
+            }
+            else {
+                $ace.post("@this.ContentUrl("~/SystemManage/Role/Add")", model, function (result) {
+                    $ace.msg(result.Msg);
+                    me.Close();
+                    vm.LoadModels();
+                }
+             );
+            }
+        }
+        //控制上一步，下一步，按钮的显隐性
+        function initControl() {
+            var w = $('#wizard').wizard();
+            w.on('change', function (e, data) {
+                var $finish = $("#btn_finish");
+                var $next = $("#btn_next");
+                if (data.direction == "next") {
+                    switch (data.step) {
+                        case 2://第二步之后将完成按钮显示，下一步隐藏
+                            if (!$('#form1').formValid()) {
+                                return false;
+                            }
+                            $finish.show();
+                            $next.hide();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else {
+                    $finish.hide();
+                    $next.show();
+                }
+            });
+        }
+    }
+</script>
+

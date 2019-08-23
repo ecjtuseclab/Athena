@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        $.ajax({
+            url: "/WorkflowManage/Workflow/GetFormJson",
+            data: { keyValue: keyValue },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                $("#form1").formSerialize(data);
+                $("#form1").find('.form-control,select,input').attr('readonly', 'readonly');
+                $("#form1").find('div.ckbox label').attr('for', '');
+            }
+        });
+    })
+</script>
+<form id="form1">
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">基本信息</a></li>
+        </ul>
+        <div style="padding-top: 20px; margin-right: 30px;">
+            <table class="form">
+                <tr>
+                    <th class="formTitle">  工作流名称</th>
+                    <td class="formValue">
+                        <input id="wfname" name="wfname" type="text" class="form-control required" placeholder="请输入工作流名称" />
+                    </td>
+                    <th class="formTitle">业务表工作流字段</th>
+                    <td class="formValue">
+                        <input id="wffieldname" name="wffieldname" type="text" class="form-control" placeholder="请输入业务表工作流字段" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">  工作流影子表</th>
+                    <td class="formValue">
+                        <input id="wflogtable" name="wflogtable" type="text" class="form-control"  placeholder="请输入工作流影子表"/>
+                    </td>
+                    <th class="formTitle">工作流作用表</th>
+                    <td class="formValue">
+                        <input id="wfownertable" name="wfownertable" type="text" class="form-control" placeholder="请输入工作流作用表" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">  启用时间</th>
+                    <td class="formValue">
+                        <input id="wfbegintime" name="wfbegintime" type="text" class="form-control" placeholder="请输入启用时间" />
+                    </td>
+                    <th class="formTitle">有效终止时间</th>
+                    <td class="formValue">
+                        <input id="wfstoptime" name="wfstoptime" type="text" class="form-control"  placeholder="请输入启用时间"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">工作流状态</th>
+                    <td class="formValue">
+                        <select id="wfstatus" name="wfnodestatus" class="form-control required">
+                            <option value="">==请选择==</option>
+                            <option value="1" title="启用">启用</option>
+                            <option value="2" title="未启用">未启用</option>
+                        </select>
+                    </td>
+                    <th class="formTitle"> 锁定状态 </th>
+                    <td class="formValue">
+                        <select id="wflock" name="wflock" class="form-control required">
+                            <option value="">==请选择==</option>
+                            <option value="1" title="锁定">锁定</option>
+                            <option value="2" title="未锁定">未锁定</option>
+                        </select>
+                       @* <input id="wflock" name="wflock" type="text" class="form-control"  placeholder="请输入 锁定状态 "/>*@
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">工作流描述</th>
+                    <td class="formValue">
+                        <input id="wfmemo" name="wfmemo" type="text" class="form-control" placeholder="请输入工作流描述" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>

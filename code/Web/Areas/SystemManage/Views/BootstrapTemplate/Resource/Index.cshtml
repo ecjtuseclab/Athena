@@ -1,0 +1,255 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>
+    $(function () {
+        gridList();
+    })
+    function gridList() {
+        var template1 =
+       {
+           "groupOp": "AND",
+           "rules": [
+           { "field": "resourcename", "op": "bw", "data": "用户管理" },
+           { "field": "resourcetype", "op": "gt", "data": "1" }
+           ]
+       };
+        var template2 =
+        {
+            "groupOp": "AND",
+            "rules": [
+              { "field": "resourcetype", "op": "eq", "data": "2" },
+              { "field": "resourcename", "op": "le", "data": "角色管理" }
+            ]
+        };
+
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            treeGrid: true,
+            treeGridModel: "adjacency",
+            ExpandColumn: "description",
+            url: "/SystemManage/Resource/GetTreeGridJson",
+            height: $(window).height() - 126,
+            colModel: [
+                { label: "主键", name: "id", hidden: true, key: true },
+                { label: '名称', name: 'resourcename', width: 200, align: 'left' },
+                { label: '描述', name: 'description', width: 200, align: 'left' },
+                { label: '路径', name: 'resourceurl', width: 200, align: 'left' },
+                { label: '类型', name: 'resourcetype', width: 50, align: 'left' },
+                //{
+                //    label: '类型', name :'resourcetype',width: 50, align: 'left',
+                //    formatter: function(cellvalue, options, rowObject){
+                //        return top.cresou
+                //    }
+                //},
+                { label: '级别', name: 'resourceleval', width: 50, align: 'left' },
+                //{ label: "样式", name: "resourceclass", width: 100, align: 'left' },
+                //{ label: '左侧图标', name: 'resourceleftico', width: 120, align: 'left' },
+                //{ label: '右侧图标', name: 'resourcerightico', width: 120, align: 'left' },
+                //{ label: '预警数量', name: 'resourcenumber', width: 50, align: 'left' },
+                { label: '排序', name: 'order', width: 50, align: 'left' },
+                { label: '脚本', name: 'resourcescript', width: 200, align: 'left' }
+            ],
+            //pager: "#gridPager",
+            pager: '#pgrps3',
+            sortname: 'id asc',
+            viewrecords: true
+            //rowList: [ 3, 5, 10],
+            //rowNum: 3
+        });
+        jQuery("#gridList").jqGrid('navGrid', '#pgrps3',
+       { edit: false, add: false, del: false },
+       {},
+       {},
+       {},
+       {
+           multipleSearch: true,
+           multipleGroup: true,
+           showQuery: true,
+           // set the names of the template
+           "tmplNames": ["模板一", "模板二"],
+           // set the template contents
+           "tmplFilters": [template1, template2]
+       }
+       );
+
+        $("#btn_search").click(function () {
+            $gridList.jqGrid('setGridParam', {
+                postData: { keyword: $("#txt_keyword").val() },
+            }).trigger('reloadGrid');
+        });
+    }
+    function btn_add() {
+        $.modalOpen({
+            id: "Form",
+            title: "新增资源",
+            url: "/SystemManage/Resource/Form",
+            width: "700px",
+            height: "540px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    function btn_edit() {
+        var keyValue = $("#gridList").jqGridRowValue().id;
+        $.modalOpen({
+            id: "Form",
+            title: "修改资源",
+            url: "/SystemManage/Resource/Form?keyValue=" + keyValue,
+            width: "700px",
+            height: "540px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    function btn_delete() {
+        $.deleteForm({
+            url: "/SystemManage/Resource/DeleteForm",
+            param: { keyValue: $("#gridList").jqGridRowValue().id },
+            success: function () {
+                $.currentWindow().$("#gridList").resetSelection();
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+    function btn_details() {
+        var keyValue = $("#gridList").jqGridRowValue().id;
+        $.modalOpen({
+            id: "Details",
+            title: "查看资源",
+            url: "/SystemManage/Resource/Details?keyValue=" + keyValue,
+            width: "700px",
+            height: "540px",
+            btn: null,
+        });
+    }
+    function btn_copyandpaste() {
+        $.deleteForm({
+            url: "/SystemManage/Resource/copyAndPasteForm",
+            param: { keyValue: $("#gridList").jqGridRowValue().id },
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+
+    }
+</script>
+
+<div class="topPanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+        <div class="btn-group">
+            <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新建资源</a>
+        </div>
+        <div class="operate">
+            <ul class="nav nav-pills">
+                <li class="first">已选中<span>1</span>项</li>
+                <li><a id="NF-edit" authorize="yes" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改资源</a></li>
+                <li><a id="NF-delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除资源</a></li>
+                <li><a id="NF-Details" authorize="yes" onclick="btn_details()"><i class="fa fa-search-plus"></i>查看资源</a></li>
+                @*<li><a id="NF-copyAndPaste" onclick="btn_copyandpaste()"><i class="fa fa-search-plus"></i>复制粘贴</a></li>*@
+            </ul>
+            <a href="javascript:;" class="close"></a>
+        </div>
+        @*<script>$('.toolbar').authorizeButton()</script>*@
+    </div>
+    <div class="search">
+        <table>
+            <tr>
+                 <td style="padding-right:3px;">
+                    <div class="btn-group">
+                        <a class="btn btn-primary dropdown-text" onclick="advance_search()">高级查询</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="input-group">
+                        <input id="txt_keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;">
+                        <span class="input-group-btn">
+                            <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+@*<table id="grps3"></table>
+<div id="pgrps3"></div>*@
+
+
+<div class="gridPanel">
+    <table id="gridList"></table>
+    <div id="gridPager"></div>
+</div>
+
+<table id="grps3"></table>
+<div id="pgrps3"></div>
+
+@*<script src="~/Content/js/jqgrid/jqgrid.min.js"></script>
+<script src="~/Content/js/jqgrid/grid.locale-cn.js"></script>
+<script>
+    $(function () {
+        pageInit();
+    });
+    function pageInit() {
+        var template1 =
+        {
+            "groupOp": "AND",
+            "rules": [
+              { "field": "resourcename", "op": "bw", "data": "Client 1" },
+              { "field": "resourceurl", "op": "gt", "data": "20" }
+            ]
+        };
+
+        var template2 =
+        {
+            "groupOp": "AND",
+            "rules": [
+              { "field": "resourceurl", "op": "eq", "data": "Client 2" },
+              { "field": "resourcename", "op": "le", "data": "10" }
+            ]
+        };
+
+        jQuery("#grps3").jqGrid({
+            url: "/SystemManage/Resource/GetTreeGridJson",
+            datatype: "json",
+            colNames: ['主键', '名称', '描述'],
+            colModel: [
+              { name: 'id', key: true, index: 'a.id', width: 55, searchtype: "integer" },
+              { name: 'resourcename', index: 'resourcename', width: 90 },
+              { name: 'resourceurl', index: 'resourceurl', width: 100 }
+            ],
+            rowNum: 10,
+            width: 700,
+            rowList: [10, 20, 30],
+            pager: '#pgrps3',
+            viewrecords: true,
+            sortorder: "desc",
+            height: 100
+        });
+        jQuery("#grps3").jqGrid('navGrid', '#pgrps3',
+        { edit: false, add: false, del: false },
+        {},
+        {},
+        {},
+        {
+            multipleSearch: true,
+            multipleGroup: true,
+            showQuery: true,
+            // set the names of the template
+            "tmplNames": ["Template One", "Template Two"],
+            // set the template contents
+            "tmplFilters": [template1, template2]
+        }
+        );
+
+    }
+</script>*@
+
+

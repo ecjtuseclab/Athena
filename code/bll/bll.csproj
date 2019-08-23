@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DCE6FF9C-7EA4-404E-94AA-B83506F8E65C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Athena.bll</RootNamespace>
+    <AssemblyName>Athena.bll</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountsPrincipal.cs" />
+    <Compile Include="SiteIdentity.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserInfo.cs" />
+    <Compile Include="WorkflowVisualization\Node.cs" />
+    <Compile Include="WorkflowVisualization\NodeAction.cs" />
+    <Compile Include="WorkflowVisualization\Path.cs" />
+    <Compile Include="WorkflowVisualization\State.cs" />
+    <Compile Include="WorkflowVisualization\WorkflowPanel.cs" />
+    <Compile Include="WorkflowVisualization\WorkflowVisualizationHelper.cs" />
+    <Compile Include="WorkflowVisualization\WorkflowVisualizationManger.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\basedal\basedal.csproj">
+      <Project>{d3860a6e-60df-4c5d-9613-47e3c594fe18}</Project>
+      <Name>basedal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IDAL\Idal.csproj">
+      <Project>{de1d4721-54e2-452f-8bd3-379bd65c3eca}</Project>
+      <Name>Idal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\model\model.csproj">
+      <Project>{77372b57-7338-4ea7-bd05-f3b1ac8895b6}</Project>
+      <Name>model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
